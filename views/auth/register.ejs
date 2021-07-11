@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Register</h2>
+      <form method="POST">
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+          <p class="name error"></p>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="text" class="form-control" id="email" name="email" required>
+          <p class="email error"></p>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+          <p class="password error"></p>
+        </div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+          <p class="confirmPassword error"></p>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.querySelector('form')
+  const nameError = document.querySelector('.name.error')
+  const emailError = document.querySelector('.email.error')
+  const passwordError = document.querySelector('.password.error')
+  const confirmPasswordError = document.querySelector('.confirmPassword.error')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    nameError.textContent = ''
+    emailError.textContent = ''
+    passwordError.textContent = ''
+    confirmPasswordError.textContent = ''
+
+    const name = form.name.value
+    const email = form.email.value
+    const password = form.password.value
+    const confirmPassword = form.confirmPassword.value
+
+    try {
+      const res = await fetch('/register', {
+        method: 'POST',
+        body: JSON.stringify({ name, email, password, confirmPassword }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const data = await res.json()
+      if(data.errors) {
+        nameError.textContent = data.errors.name
+        emailError.textContent = data.errors.email
+        passwordError.textContent = data.errors.password
+        confirmPasswordError.textContent = data.errors.confirmPassword
+      }
+      if(data.user) {
+        location.assign('/')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  });
+</script>

@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Login</h2>
+      <form>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="text" class="form-control" id="email" name="email" required>
+          <p class="email error"></p>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+          <p class="password error"></p>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.querySelector('form')
+  const emailError = document.querySelector('.email.error')
+  const passwordError = document.querySelector('.password.error')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    emailError.textContent = ''
+    passwordError.textContent = ''
+
+    const email = form.email.value
+    const password = form.password.value
+
+    try {
+      const res = await fetch('/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const data = await res.json()
+      if(data.errors) {
+        emailError.textContent = data.errors.email
+        passwordError.textContent = data.errors.password
+      }
+      if(data.user) {
+        location.assign('/')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  });
+</script>
