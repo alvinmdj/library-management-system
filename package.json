@@ -1,0 +1,17 @@
+{
+  "name": "library-management-system",
+  "version": "1.0.0",
+  "description": "Library Management Systems using NodeJS ExpressJS MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alvin Martin Djong",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
