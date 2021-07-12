@@ -5,25 +5,62 @@
       <div class="col overflow-auto h-100">
         <div class="bg-light border rounded-3 p-3">
           <h2 class="mb-3 display-4">Add New Book</h2>
-          <form method="POST">
+          <form method="POST" name="add">
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" name="title" required>
             </div>
             <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
+              <label for="author" class="form-label">Author</label>
+              <input type="text" class="form-control" name="author" required>
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            <div class="mb-3">
+              <label for="publish_year" class="form-label">Publish Year</label>
+              <input type="text" class="form-control" name="publish_year" required>
             </div>
-            <a href="/admin/book" class="btn btn-secondary">Back</a>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mb-3">
+              <label for="page_count" class="form-label">Page Count</label>
+              <input type="number" class="form-control" name="page_count" required>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="5" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="stock" class="form-label">Stock</label>
+              <input type="number" class="form-control" name="stock" required>
+            </div>
+            <img class="image-preview">
+            <div class="mb-3">
+              <label for="cover_image" class="form-label">Cover Image</label>
+              <input class="form-control" type="file" id="cover_image" name="cover_image" required>
+            </div>
+            <div class="float-end mb-5">
+              <a href="/admin/book" class="btn btn-secondary">Back</a>
+              <form action="/admin/book" method="POST">
+                <button type="submit" class="btn btn-primary">Add Book</button>
+              </form>
+            </div>
+            <br>
+            <br>
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  const cover_image = document.querySelector('#cover_image')
+  const imagePreview = document.querySelector('.image-preview')
+
+  cover_image.addEventListener('change', () => {
+    const url = URL.createObjectURL(cover_image.files[0])
+    imagePreview.src = url
+    imagePreview.alt = "image preview"
+    imagePreview.width = "150"
+    imagePreview.height = "200"
+    imagePreview.classList.add("mb-3")
+    console.log(url)
+  });
+</script>
