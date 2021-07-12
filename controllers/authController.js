@@ -72,7 +72,7 @@ exports.login_post = (req, res) => {
     .then(user => {
       const token = createJWT(user._id)
       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-      res.status(201).json({ user: user._id })
+      res.status(201).json({ user: user._id, role: user.role })
     })
     .catch(err => {
       const errors = handleErrors(err)

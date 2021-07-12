@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="css/styles.css">
 <div class="container">
   <div class="row">
     <div class="col-md-3">
@@ -46,7 +47,10 @@
         passwordError.textContent = data.errors.password
       }
       if(data.user) {
-        location.assign('/')
+        if(data.role === 0) {
+          location.assign('/admin')
+        }
+        else location.assign('/')
       }
     } catch (err) {
       console.log(err)

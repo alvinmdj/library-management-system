@@ -1,0 +1,52 @@
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="col py-3">
+      <div class="col overflow-auto h-100">
+        <div class="bg-light border rounded-3 p-3">
+          <h2 class="mb-3 display-4">Book Management</h2>
+          <a href="/admin/book/add" class="btn btn-primary mb-3">List a new book</a>
+          <div class="table-responsive-md">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Publish Year</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Book 1</td>
+                  <td>Alvin</td>
+                  <td>2021</td>
+                  <td>
+                    <form action="" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                      <a href="/admin" class="btn btn-info badge">Update</a>
+                      <button type="submit" class="btn btn-danger badge" onclick="confirm('Are you sure to delete this book?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Book 1</td>
+                  <td>Alvin</td>
+                  <td>2021</td>
+                  <td>
+                    <form action="" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                      <a href="/admin" class="btn btn-info badge">Update</a>
+                      <button type="submit" class="btn btn-danger badge" onclick="confirm('Are you sure to delete this book?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
