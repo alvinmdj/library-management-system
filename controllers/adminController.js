@@ -71,24 +71,41 @@ exports.update_book_view = async (req, res) => {
   }
 }
 
-exports.update_book = (req, res) => {
+exports.update_book = async (req, res) => {
   const { title, author, publish_year, page_count, description, stock } = req.body
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
-    removeImage(req.file.path)
-    Book.findById(req.params.id)
-      .then(book => {
-        res.render('admin/book-update', { 
-          errors: errors.array(),
-          book
-        })
+    try {
+      if(req.file) removeImage(req.file.path)
+      const book = await Book.findById(req.body.id)
+      res.render('admin/book-update', { 
+        errors: errors.array(),
+        book,
       })
-      .catch(err => console.log(err))
+    } catch(err) {
+      console.log(err)
+    }
   } else {
-    const cover_image = req.file.filename
-    Book.create({ title, author, publish_year, page_count, description, stock, cover_image })
+    let cover_image
+    if(req.file) {
+      removeImage(req.file.path)
+      cover_image = req.file.filename
+    } else {
+      try {
+        const book = await Book.findById(req.body.id)
+        cover_image = book.cover_image
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    Book.updateOne(
+      { _id: req.body.id },
+      { $set: {
+          title, author, publish_year, page_count, description, stock, cover_image
+        }
+      })
       .then(result => {
-        req.flash('msg', 'New book has been added!')
+        req.flash('msg', 'Book has been updated!')
         res.redirect('/admin/book')
       })
       .catch(err => console.log(err))

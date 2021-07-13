@@ -6,6 +6,7 @@
         <div class="bg-light border rounded-3 p-3">
           <h2 class="mb-3 display-4">Edit Book</h2>
           <form method="POST" action="/admin/book?_method=PUT" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<%= book.id %>">
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title" value="<%= book.title %>" required >
@@ -43,7 +44,7 @@
             </div>
             <div class="mb-3">
               <label for="cover_image" class="form-label">Cover Image</label>
-              <input class="form-control" type="file" id="cover_image" name="cover_image" required>
+              <input class="form-control" type="file" id="cover_image" name="cover_image">
             </div>
             <div class="float-end mb-5">
               <a href="/admin/book" class="btn btn-secondary">Back</a>

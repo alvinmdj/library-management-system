@@ -17,7 +17,7 @@ router.post('/book', checkUser, bookValidator, adminController.add_book)
 
 router.get('/book/update/:id', adminController.update_book_view)
 
-router.put('/book', adminController.update_book)
+router.put('/book', bookValidator, adminController.update_book)
 
 router.delete('/book', adminController.delete_book)
 
