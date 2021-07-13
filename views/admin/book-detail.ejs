@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="col py-3">
+      <div class="col overflow-auto h-100">
+        <div class="bg-light border rounded-3 p-3">
+          <h2 class="mb-3 display-4">Book Details</h2>
+          <div class="row">
+            <div class="col-md-8">
+              <table class="table table-borderless">
+                <tbody>
+                  <tr>
+                    <th scope="row">Title</th>
+                    <th>:</th>
+                    <td><%= book.title %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Author</th>
+                    <th>:</th>
+                    <td><%= book.author %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Publish Year</th>
+                    <th>:</th>
+                    <td><%= book.publish_year %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Page Count</th>
+                    <th>:</th>
+                    <td><%= book.page_count %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Description</th>
+                    <th>:</th>
+                    <td><%= book.description %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Stock</th>
+                    <th>:</th>
+                    <td><%= book.stock %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Cover Image</th>
+                    <th>:</th>
+                    <td><img src="http://localhost:3000/<%= book.cover_image %>" alt="<%= book.title %>" width="150" height="200"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <form action="/admin/book/" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                <a href="/admin/book" class="btn btn-secondary">Back to book list</a>
+                <a href="/admin/book/update/<%= book._id %>" class="btn btn-info">Edit Book</a>
+                <input type="hidden" name="book_id" value="<%= book._id %>" />
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete this book?')">Delete Book</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

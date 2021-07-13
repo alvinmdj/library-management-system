@@ -6,6 +6,11 @@
         <div class="bg-light border rounded-3 p-3">
           <h2 class="mb-3 display-4">Book Management</h2>
           <a href="/admin/book/add" class="btn btn-primary mb-3">List a new book</a>
+          <% if (msg.length !== 0) { %>
+            <div class="alert alert-info fw-bold" role="alert">
+              <%= msg %>
+            </div>
+          <% } %>
           <div class="table-responsive-md">
             <table class="table">
               <thead>
@@ -14,34 +19,28 @@
                   <th scope="col">Title</th>
                   <th scope="col">Author</th>
                   <th scope="col">Publish Year</th>
+                  <th scope="col">Stock</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Book 1</td>
-                  <td>Alvin</td>
-                  <td>2021</td>
-                  <td>
-                    <form action="" method="POST" class="d-grid gap-2 d-md-block mb-0">
-                      <a href="/admin" class="btn btn-info badge">Update</a>
-                      <button type="submit" class="btn btn-danger badge" onclick="confirm('Are you sure to delete this book?')">Delete</button>
-                    </form>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Book 1</td>
-                  <td>Alvin</td>
-                  <td>2021</td>
-                  <td>
-                    <form action="" method="POST" class="d-grid gap-2 d-md-block mb-0">
-                      <a href="/admin" class="btn btn-info badge">Update</a>
-                      <button type="submit" class="btn btn-danger badge" onclick="confirm('Are you sure to delete this book?')">Delete</button>
-                    </form>
-                  </td>
-                </tr>
+                <% books.forEach((book, i) => { %>
+                  <tr>
+                    <th scope="row"><%= ++i %></th>
+                    <td><%= book.title %></td>
+                    <td><%= book.author %></td>
+                    <td><%= book.publish_year %></td>
+                    <td><%= book.stock %></td>
+                    <td>
+                      <form action="/admin/book/" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                        <a href="/admin/book/detail/<%= book._id %>" class="btn btn-secondary badge">Detail</a>
+                        <a href="/admin/book/update/<%= book._id %>" class="btn btn-info badge">Update</a>
+                        <input type="hidden" name="book_id" value="<%= book._id %>" />
+                        <button type="submit" class="btn btn-danger badge" onclick="return confirm('Are you sure to delete this book?')">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
               </tbody>
             </table>
           </div>

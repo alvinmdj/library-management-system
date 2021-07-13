@@ -8,6 +8,9 @@ const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const multer = require('multer')
 const methodOverride = require('method-override')
+const session = require('express-session')
+const flash = require('connect-flash')
+const path = require('path')
 
 const authRoutes = require('./routes/authRoutes')
 const bookRoutes = require('./routes/bookRoutes')
@@ -16,12 +19,13 @@ const { checkUser } = require('./middlewares/authMiddleware')
 
 const app = express()
 
-const fileStorage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images')
+    cb(null, 'public/images')
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname)
+    // cb(null, file.fieldname + '-' + Date.now() + '-' + file.originalname)
+    cb(null, `${file.fieldname}-${Date.now()}-${file.originalname}`)
   }
 })
 
@@ -37,12 +41,19 @@ app.set('view engine', 'ejs')
 app.set('layout', 'layouts/base-layout')
 
 app.use(expressLayouts)
-app.use(express.static('public'))
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
-app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
+app.use(multer({ storage, fileFilter }).single('cover_image'))
 app.use(methodOverride('_method'))
+app.use(cookieParser('secret'))
+app.use(session({
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+}))
+app.use(flash())
 
 app.get('*', checkUser)
 app.get('/', (req, res) => res.render('index'))
