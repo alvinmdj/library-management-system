@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const path = require('path')
+
+const coverImageBasePath = 'public/images'
 
 const bookSchema = new mongoose.Schema({
   title: {
@@ -36,6 +39,12 @@ const bookSchema = new mongoose.Schema({
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
+  }
+})
+
+bookSchema.virtual('coverImagePath').get(function() {
+  if (this.cover_image !== null) {
+    return path.join('/', coverImageBasePath, this.cover_image)
   }
 })
 

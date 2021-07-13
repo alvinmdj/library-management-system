@@ -43,7 +43,7 @@ exports.add_book = (req, res) => {
       stock: stock || ''
     })
   } else {
-    const cover_image = req.file.path
+    const cover_image = req.file.filename
     Book.create({ title, author, publish_year, page_count, description, stock, cover_image })
       .then(result => {
         req.flash('msg', 'New book has been added!')
@@ -72,7 +72,27 @@ exports.update_book_view = async (req, res) => {
 }
 
 exports.update_book = (req, res) => {
-  res.send('Update book')
+  const { title, author, publish_year, page_count, description, stock } = req.body
+  const errors = validationResult(req)
+  if(!errors.isEmpty()) {
+    removeImage(req.file.path)
+    Book.findById(req.params.id)
+      .then(book => {
+        res.render('admin/book-update', { 
+          errors: errors.array(),
+          book
+        })
+      })
+      .catch(err => console.log(err))
+  } else {
+    const cover_image = req.file.filename
+    Book.create({ title, author, publish_year, page_count, description, stock, cover_image })
+      .then(result => {
+        req.flash('msg', 'New book has been added!')
+        res.redirect('/admin/book')
+      })
+      .catch(err => console.log(err))
+  }
 }
 
 exports.delete_book = (req, res) => {

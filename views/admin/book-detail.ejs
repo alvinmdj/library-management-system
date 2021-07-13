@@ -42,11 +42,11 @@
                   <tr>
                     <th scope="row">Cover Image</th>
                     <th>:</th>
-                    <td><img src="http://localhost:3000/<%= book.cover_image %>" alt="<%= book.title %>" width="150" height="200"></td>
+                    <td><img id="img" src="<%= book.coverImagePath %>" alt="<%= book.title %>" width="150" height="200"></td>
                   </tr>
                 </tbody>
               </table>
-              <form action="/admin/book/" method="POST" class="d-grid gap-2 d-md-block mb-0">
+              <form action="/admin/book?_method=DELETE" method="POST" class="d-grid gap-2 d-md-block mb-0">
                 <a href="/admin/book" class="btn btn-secondary">Back to book list</a>
                 <a href="/admin/book/update/<%= book._id %>" class="btn btn-info">Edit Book</a>
                 <input type="hidden" name="book_id" value="<%= book._id %>" />
