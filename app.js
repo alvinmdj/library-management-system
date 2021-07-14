@@ -12,8 +12,8 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const path = require('path')
 
+const indexRoutes = require('./routes/indexRoutes')
 const authRoutes = require('./routes/authRoutes')
-const bookRoutes = require('./routes/bookRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const { adminArea, checkUser } = require('./middlewares/authMiddleware')
 
@@ -55,9 +55,8 @@ app.use(session({
 app.use(flash())
 
 app.get('*', checkUser)
-app.get('/', (req, res) => res.render('index'))
+app.use('/', indexRoutes)
 app.use('/', authRoutes)
-app.use('/book', bookRoutes)
 app.use('/admin', adminArea, adminRoutes)
 
 mongoose.connect(process.env.DB_URL, {

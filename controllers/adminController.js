@@ -3,6 +3,23 @@ const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
 
+const genres = [
+  'Art', 
+  'Science Fiction', 
+  'Fantasy',
+  'Finance',
+  'Biographies', 
+  'Recipes', 
+  'Romance', 
+  'Children',
+  'History',
+  'Medicine',
+  'Religion',
+  'Mystery',
+  'Music',
+  'Science'
+]
+
 const removeImage = (filePath) => {
   filePath = path.join(__dirname, '../', filePath)
   fs.unlink(filePath, err => {
@@ -24,7 +41,7 @@ exports.books = async (req, res) => {
 }
 
 exports.add_book_view = (req, res) => {
-  res.render('admin/book-add')
+  res.render('admin/book-add', { genres })
 }
 
 exports.add_book = (req, res) => {
@@ -33,6 +50,7 @@ exports.add_book = (req, res) => {
   if(!errors.isEmpty()) {
     removeImage(req.file.path)
     res.render('admin/book-add', { 
+      genres,
       errors: errors.array(),
       title: title || '',
       author: author || '',
@@ -64,20 +82,21 @@ exports.detail_book = async (req, res) => {
 exports.update_book_view = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
-    res.render('admin/book-update', { book })
+    res.render('admin/book-update', { book, genres })
   } catch(err) {
     console.log(err)
   }
 }
 
 exports.update_book = async (req, res) => {
-  const { title, author, publish_year, page_count, description, stock } = req.body
+  const { title, author, publish_year, page_count, genre, description, stock } = req.body
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
     try {
       if(req.file) removeImage(req.file.path)
       const book = await Book.findById(req.body.id)
-      res.render('admin/book-update', { 
+      res.render('admin/book-update', {
+        genres,
         errors: errors.array(),
         book,
       })
@@ -104,7 +123,7 @@ exports.update_book = async (req, res) => {
     Book.updateOne(
       { _id: req.body.id },
       { $set: {
-          title, author, publish_year, page_count, description, stock, cover_image
+          title, author, publish_year, page_count, genre, description, stock, cover_image
         }
       })
       .then(result => {
@@ -126,10 +145,4 @@ exports.delete_book = async (req, res) => {
   } catch(err) {
     console.log(err)
   }
-  // Book.deleteOne({ _id: req.body.book_id })
-  //   .then(result => {
-  //     removeImage(req.bo)
-  //   })
-  //   .catch(err => console.log(err))
 }
-

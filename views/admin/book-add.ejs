@@ -30,6 +30,15 @@
               <input type="number" class="form-control" name="page_count" min="1" required <% if (typeof page_count !== 'undefined') { %> value="<%= page_count %>" <% } %>>
             </div>
             <div class="mb-3">
+              <label for="genre" class="form-label">Genre</label>
+              <select class="form-select" name="genre" required>
+                <option selected value="" disabled>Choose genre</option>
+                <% genres.forEach(genre => { %>
+                  <option value="<%= genre %>"><%= genre %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="mb-3">
               <label for="description" class="form-label">Description</label>
               <textarea class="form-control" name="description" rows="5"><% if (typeof description !== 'undefined') { %><%= description %><% } %></textarea>
             </div>

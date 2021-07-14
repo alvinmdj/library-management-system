@@ -19,6 +19,7 @@
                   <th scope="col">Title</th>
                   <th scope="col">Author</th>
                   <th scope="col">Publish Year</th>
+                  <th scope="col">Genre</th>
                   <th scope="col">Stock</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -30,6 +31,7 @@
                     <td><%= book.title %></td>
                     <td><%= book.author %></td>
                     <td><%= book.publish_year %></td>
+                    <td><%= book.genre %></td>
                     <td><%= book.stock %></td>
                     <td>
                       <form action="/admin/book?_method=DELETE" method="POST" class="d-grid gap-2 d-md-block mb-0">

@@ -31,6 +31,16 @@
               <input type="number" class="form-control" name="page_count" min="1" value="<%= book.page_count %>" required>
             </div>
             <div class="mb-3">
+              <label for="genre" class="form-label">Genre</label>
+              <select class="form-select" name="genre" required>
+                <option value="" disabled>Choose genre</option>
+                <option value="<%= book.genre %>" selected><%= book.genre %></option>
+                <% genres.filter(genre => genre !== book.genre).map(genre => { %>
+                  <option value="<%= genre %>"><%= genre %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="mb-3">
               <label for="description" class="form-label">Description</label>
               <textarea class="form-control" name="description" rows="5"><%= book.description %></textarea>
             </div>
