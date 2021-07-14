@@ -15,7 +15,7 @@ const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const bookRoutes = require('./routes/bookRoutes')
 const adminRoutes = require('./routes/adminRoutes')
-const { checkUser } = require('./middlewares/authMiddleware')
+const { adminArea, checkUser } = require('./middlewares/authMiddleware')
 
 const app = express()
 
@@ -58,7 +58,7 @@ app.get('*', checkUser)
 app.get('/', (req, res) => res.render('index'))
 app.use('/', authRoutes)
 app.use('/book', bookRoutes)
-app.use('/admin', adminRoutes)
+app.use('/admin', adminArea, adminRoutes)
 
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true, 

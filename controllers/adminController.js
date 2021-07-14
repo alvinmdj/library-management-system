@@ -2,7 +2,6 @@ const Book = require('../models/Book')
 const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
-const { title } = require('process')
 
 const removeImage = (filePath) => {
   filePath = path.join(__dirname, '../', filePath)
@@ -56,7 +55,7 @@ exports.add_book = (req, res) => {
 exports.detail_book = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id)
-    res.render('admin/book-detail', { book })
+    res.render('admin/book-detail', { book, msg: req.flash('msg') })
   } catch (err) {
     console.log(err)
   }
@@ -88,7 +87,11 @@ exports.update_book = async (req, res) => {
   } else {
     let cover_image
     if(req.file) {
-      removeImage(req.file.path)
+      Book.findById(req.body.id)
+        .then(book => {
+          removeImage(book.coverImagePath)
+        })
+        .catch(err => console.log(err))
       cover_image = req.file.filename
     } else {
       try {
@@ -105,14 +108,28 @@ exports.update_book = async (req, res) => {
         }
       })
       .then(result => {
-        req.flash('msg', 'Book has been updated!')
-        res.redirect('/admin/book')
+        req.flash('msg', `Book has been updated!`)
+        res.redirect(`/admin/book/detail/${req.body.id}`)
       })
       .catch(err => console.log(err))
   }
 }
 
-exports.delete_book = (req, res) => {
-  res.send('Delete book')
+exports.delete_book = async (req, res) => {
+  try {
+    const book = await Book.findById(req.body.book_id)
+    const bookTitle = book.title
+    removeImage(book.coverImagePath)
+    await book.remove()
+    req.flash('msg', `Book '${bookTitle}' has been deleted!`)
+    res.redirect(`/admin/book`)
+  } catch(err) {
+    console.log(err)
+  }
+  // Book.deleteOne({ _id: req.body.book_id })
+  //   .then(result => {
+  //     removeImage(req.bo)
+  //   })
+  //   .catch(err => console.log(err))
 }
 

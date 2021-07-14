@@ -32,7 +32,7 @@
                     <td><%= book.publish_year %></td>
                     <td><%= book.stock %></td>
                     <td>
-                      <form action="/admin/book/" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                      <form action="/admin/book?_method=DELETE" method="POST" class="d-grid gap-2 d-md-block mb-0">
                         <a href="/admin/book/detail/<%= book._id %>" class="btn btn-secondary badge">Detail</a>
                         <a href="/admin/book/update/<%= book._id %>" class="btn btn-info badge">Update</a>
                         <input type="hidden" name="book_id" value="<%= book._id %>" />

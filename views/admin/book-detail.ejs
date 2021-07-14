@@ -7,6 +7,11 @@
           <h2 class="mb-3 display-4">Book Details</h2>
           <div class="row">
             <div class="col-md-8">
+              <% if (msg.length !== 0) { %>
+                <div class="alert alert-info fw-bold" role="alert">
+                  <%= msg %>
+                </div>
+              <% } %>
               <table class="table table-borderless">
                 <tbody>
                   <tr>

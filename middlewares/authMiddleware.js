@@ -18,6 +18,28 @@ const requireAuth = (req, res, next) => {
   }
 }
 
+const adminArea = async (req, res, next) => {
+  const token = req.cookies.jwt
+
+  if(token) {
+    jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decodedToken) => {
+      if(err) {
+        console.log(err.message)
+        res.redirect('/')
+      } else {
+        let user = await User.findById(decodedToken.id)
+        if(user.role === 0) {
+          next()
+        } else {
+          res.redirect('/')
+        }
+      }
+    })
+  } else {
+    res.redirect('/')
+  }
+}
+
 const checkUser = (req, res, next) => {
   const token = req.cookies.jwt
 
@@ -56,4 +78,4 @@ const checkLogin = (req, res, next) => {
   }
 }
 
-module.exports = { requireAuth, checkUser, checkLogin }
+module.exports = { requireAuth, adminArea, checkUser, checkLogin }
