@@ -7,6 +7,17 @@
           <h2 class="mb-3 display-4">Add New Book</h2>
           <form method="POST" action="/admin/book" enctype="multipart/form-data">
             <div class="mb-3">
+              <label for="isbn" class="form-label">ISBN</label>
+              <input type="text" class="form-control" id="isbn" name="isbn" required <% if (typeof isbn !== 'undefined') { %> value="<%= isbn %>" <% } %>>
+              <% if (typeof errors !== 'undefined') { %>
+                <% errors.forEach(err => { %>
+                  <% if (err.param === 'publish_year') { %>
+                    <p class="text-danger fw-bold mb-0"><%= err.msg %></p>
+                  <% } %>
+                <% }) %>
+              <% } %>
+            </div>
+            <div class="mb-3">
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title" required <% if (typeof title !== 'undefined') { %> value="<%= title %>" <% } %>>
             </div>

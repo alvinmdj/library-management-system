@@ -25,9 +25,10 @@
                 </tr>
               </thead>
               <tbody>
-                <% books.forEach((book, i) => { %>
+                <% let number = (currentPage - 1) * perPage %>
+                <% books.forEach((book) => { %>
                   <tr>
-                    <th scope="row"><%= ++i %></th>
+                    <th scope="row"><%= ++number %></th>
                     <td><%= book.title %></td>
                     <td><%= book.author %></td>
                     <td><%= book.publish_year %></td>
@@ -46,17 +47,51 @@
               </tbody>
             </table>
             <div>
-              <ul class="pagination justify-content-center mt-5">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#">Next</a>
-                </li>
-              </ul>
+              <% if (totalPage > 0) { %>
+                <p>Total item: <%= totalBook %></p>
+                <ul class="pagination justify-content-center mt-5">
+                  <% if (currentPage === 1) { %>
+                    <li class="page-item disabled">
+                      <a class="page-link">Previous</a>
+                    </li>
+                  <% } else { %>
+                    <li class="page-item">
+                      <a class="page-link" href="/admin/book?page=1">First</a>
+                    </li>
+                  <% } %>
+                  <% let i = (currentPage > 5 ? currentPage - 4 : 1) %>
+                  <% if (i !== 1) { %>
+                    <li class="page-item disabled">
+                      <a class="page-link">...</a>
+                    </li>
+                  <% } %>
+                  <% for (; i <= currentPage + 4 && i <= totalPage; i++) { %>
+                    <% if (i === currentPage) { %>
+                      <li class="page-item active">
+                        <a class="page-link"><%= i %></a>
+                      </li>
+                    <% } else { %>
+                      <li class="page-item">
+                        <a class="page-link" href="/admin/book?page=<%= i %>"><%= i %></a>
+                      </li>
+                    <% } %>
+                    <% if (i == currentPage + 4 && i < totalPage) { %>
+                      <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                      </li>
+                    <% } %>
+                  <% } %>
+                  <% if (currentPage === totalPage) { %>
+                    <li class="page-item disabled">
+                      <a class="page-link">Last</a>
+                    </li>
+                  <% } else { %>
+                    <li class="page-item">
+                      <a class="page-link" href="/admin/book?page=<%= totalPage %>">Last</a>
+                    </li>
+                  <% } %>
+                </ul>
+              <% } %>
             </div>
           </div>
         </div>

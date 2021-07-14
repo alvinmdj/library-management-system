@@ -4,9 +4,16 @@ const path = require('path')
 const coverImageBasePath = 'public/images'
 
 const bookSchema = new mongoose.Schema({
+  isbn: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
   title: {
     type: String,
     required: true,
+    trim: true,
   },
   author: {
     type: String,

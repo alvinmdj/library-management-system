@@ -31,13 +31,29 @@ exports.admin_dashboard = (req, res) => {
   res.render('admin/index')
 }
 
-exports.books = async (req, res) => {
-  try {
-    const books = await Book.find()
-    res.render('admin/books', { books, msg: req.flash('msg') })
-  } catch(err) {
-    console.log(err)
-  }
+exports.books = (req, res) => {
+  let currentPage = req.query.page || 1
+  let perPage = req.query.perPage || 5
+  let totalBook
+
+  Book.find()
+    .countDocuments()
+    .then(count => {
+      totalBook = count
+      return Book.find()
+        .skip(parseInt(currentPage - 1) * parseInt(perPage))
+        .limit(parseInt(perPage))
+    })
+    .then(books => {
+      res.render('admin/books', {
+        books,
+        currentPage: parseInt(currentPage),
+        perPage: parseInt(perPage),
+        totalBook: parseInt(totalBook),
+        totalPage: Math.ceil(parseInt(totalBook) / parseInt(perPage)),
+        msg: req.flash('msg')
+      })
+    })
 }
 
 exports.add_book_view = (req, res) => {
@@ -45,13 +61,14 @@ exports.add_book_view = (req, res) => {
 }
 
 exports.add_book = (req, res) => {
-  const { title, author, publish_year, page_count, description, stock } = req.body
+  const { isbn, title, author, publish_year, page_count, genre, description, stock } = req.body
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
     removeImage(req.file.path)
     res.render('admin/book-add', { 
       genres,
       errors: errors.array(),
+      isbn: isbn || '',
       title: title || '',
       author: author || '',
       publish_year: publish_year || '',
@@ -61,7 +78,7 @@ exports.add_book = (req, res) => {
     })
   } else {
     const cover_image = req.file.filename
-    Book.create({ title, author, publish_year, page_count, description, stock, cover_image })
+    Book.create({ isbn, title, author, publish_year, page_count, genre, description, stock, cover_image })
       .then(result => {
         req.flash('msg', 'New book has been added!')
         res.redirect('/admin/book')
@@ -89,7 +106,7 @@ exports.update_book_view = async (req, res) => {
 }
 
 exports.update_book = async (req, res) => {
-  const { title, author, publish_year, page_count, genre, description, stock } = req.body
+  const { isbn, title, author, publish_year, page_count, genre, description, stock } = req.body
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
     try {
@@ -123,7 +140,7 @@ exports.update_book = async (req, res) => {
     Book.updateOne(
       { _id: req.body.id },
       { $set: {
-          title, author, publish_year, page_count, genre, description, stock, cover_image
+          isbn, title, author, publish_year, page_count, genre, description, stock, cover_image
         }
       })
       .then(result => {

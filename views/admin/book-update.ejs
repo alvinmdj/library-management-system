@@ -7,6 +7,18 @@
           <h2 class="mb-3 display-4">Edit Book</h2>
           <form method="POST" action="/admin/book?_method=PUT" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<%= book.id %>">
+            <input type="hidden" name="oldISBN" value="<%= book.oldISBN || book.isbn %>">
+            <div class="mb-3">
+              <label for="isbn" class="form-label">ISBN</label>
+              <input type="text" class="form-control" id="isbn" name="isbn" value="<%= book.isbn %>" required >
+              <% if (typeof errors !== 'undefined') { %>
+                <% errors.forEach(err => { %>
+                  <% if (err.param === 'isbn') { %>
+                    <p class="text-danger fw-bold mb-0"><%= err.msg %></p>
+                  <% } %>
+                <% }) %>
+              <% } %>
+            </div>
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title" value="<%= book.title %>" required >
