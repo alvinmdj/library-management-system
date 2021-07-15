@@ -19,4 +19,6 @@ router.get('/book/:page?', adminController.books)
 
 // Manage Orders
 
+// Manage Users
+
 module.exports = router

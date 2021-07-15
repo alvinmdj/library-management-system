@@ -10,7 +10,11 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
-    <title>Alvin's Library</title>
+    <% if (typeof title !== 'undefined') { %>
+      <title>Library | <%= title %></title>
+    <% } else { %>
+      <title>Library</title>
+    <% } %> 
   </head>
   <body>
     <%- include('../partials/header') %>
