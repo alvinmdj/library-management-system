@@ -11,8 +11,19 @@
               <%= msg %>
             </div>
           <% } %>
+          <div class="row">
+            <div class="col-md-8">
+              <p class="mt-2">Total item: <%= totalBook || 0 %></p>
+            </div>
+            <div class="col-md-4">
+              <form action="/admin/book/1" method="GET" class="d-flex">
+                <input class="form-control me-2" type="text" name="search" value="<%= searchOption.search %>" placeholder="Search book title or ISBN...">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
           <div class="table-responsive-md">
-            <table class="table">
+            <table class="table table-hover">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -48,15 +59,14 @@
             </table>
             <div>
               <% if (totalPage > 0) { %>
-                <p>Total item: <%= totalBook %></p>
                 <ul class="pagination justify-content-center mt-5">
                   <% if (currentPage === 1) { %>
                     <li class="page-item disabled">
-                      <a class="page-link">Previous</a>
+                      <a class="page-link">First</a>
                     </li>
                   <% } else { %>
                     <li class="page-item">
-                      <a class="page-link" href="/admin/book?page=1">First</a>
+                      <a class="page-link" href="/admin/book/1?search=<%= searchOption.search %>">First</a>
                     </li>
                   <% } %>
                   <% let i = (currentPage > 5 ? currentPage - 4 : 1) %>
@@ -72,7 +82,7 @@
                       </li>
                     <% } else { %>
                       <li class="page-item">
-                        <a class="page-link" href="/admin/book?page=<%= i %>"><%= i %></a>
+                        <a class="page-link" href="/admin/book/<%= i %>?search=<%= searchOption.search %>"><%= i %></a>
                       </li>
                     <% } %>
                     <% if (i == currentPage + 4 && i < totalPage) { %>
@@ -87,7 +97,7 @@
                     </li>
                   <% } else { %>
                     <li class="page-item">
-                      <a class="page-link" href="/admin/book?page=<%= totalPage %>">Last</a>
+                      <a class="page-link" href="/admin/book/<%= totalPage %>?search=<%= searchOption.search %>">Last</a>
                     </li>
                   <% } %>
                 </ul>

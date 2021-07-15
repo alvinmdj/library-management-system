@@ -32,21 +32,29 @@ exports.admin_dashboard = (req, res) => {
 }
 
 exports.books = (req, res) => {
-  let currentPage = req.query.page || 1
+  let currentPage = req.params.page || 1
   let perPage = req.query.perPage || 5
   let totalBook
+  let query = Book.find()
 
-  Book.find()
+  if(req.query.search) {
+    // query = query.regex('title', new RegExp(req.query.search, 'i'))
+    query = Book.find( { $or: [{ title: { $regex: req.query.search, $options: 'i' } }, { isbn: { $regex: req.query.search, $options: 'i' }}] } )
+  }
+
+  query
     .countDocuments()
     .then(count => {
       totalBook = count
-      return Book.find()
+      // return Book.find().regex('title', new RegExp(req.query.search, 'i'))
+      return Book.find({ $or: [{ title: { $regex: req.query.search || '', $options: 'i' } }, { isbn: { $regex: req.query.search || '', $options: 'i' }}] })
         .skip(parseInt(currentPage - 1) * parseInt(perPage))
         .limit(parseInt(perPage))
     })
     .then(books => {
       res.render('admin/books', {
         books,
+        searchOption: req.query,
         currentPage: parseInt(currentPage),
         perPage: parseInt(perPage),
         totalBook: parseInt(totalBook),
