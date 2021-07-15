@@ -50,6 +50,7 @@ exports.books = (req, res) => {
       return Book.find({ $or: [{ title: { $regex: req.query.search || '', $options: 'i' } }, { isbn: { $regex: req.query.search || '', $options: 'i' }}] })
         .skip(parseInt(currentPage - 1) * parseInt(perPage))
         .limit(parseInt(perPage))
+        .sort({ title: 1 })
     })
     .then(books => {
       res.render('admin/books', {
