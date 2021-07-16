@@ -1,3 +1,15 @@
+<style>
+  .navbar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .navbar-nav > li{
+  padding-left:15px;
+  padding-right:15px;
+}
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href='/'>My Library</a>
@@ -12,6 +24,14 @@
         <li class="nav-item">
           <a class="nav-link" href="/books">All Books</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="/cart">
+            Cart
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              99+
+            </span>
+          </a>
+        </li>
         <% if (!user) { %>
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
@@ -20,6 +40,9 @@
             <a class="nav-link" href="/login">Login</a>
           </li>
         <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/inventory">Inventory</a>
+          </li>
           <% if (user.role === 0) { %>
             <li class="nav-item">
               <a class="nav-link bg-primary text-white rounded-pill" href="/admin">Admin Panel</a>
@@ -31,7 +54,6 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-              <li><a class="dropdown-item" href="/inventory">Inventory</a></li>
               <li><a class="dropdown-item" href="/logout">Logout</a></li>
             </ul>
           </li>

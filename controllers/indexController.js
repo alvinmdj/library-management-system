@@ -21,6 +21,10 @@ exports.userProfile = (req, res) => {
   // res.send('SOON! this is where user profile appear (user can edit their own profile!)')
 }
 
+exports.cart = (req, res) => {
+  res.send('this is cart')
+}
+
 exports.borrowedBooks = (req, res) => {
   res.send('this is where borrowed books appear')
 }
