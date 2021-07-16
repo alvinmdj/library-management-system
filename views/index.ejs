@@ -1,3 +1,13 @@
+<style>
+  #book_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+</style>
+
 <div id="carouselExampleCaptions" class="carousel slide mb-4" data-bs-ride="carousel">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -9,21 +19,21 @@
       <img src="public/assets/library-with-books.jpg" class="d-block w-100" alt="library">
       <div class="carousel-caption d-none d-md-block">
         <h5>First slide label</h5>
-        <p>Book photo created by ikaika - <a href="https://www.freepik.com/photos/book">www.freepik.com</a></p>
+        <p>Book photo created by ikaika - <a href='https://www.freepik.com/photos/book'>www.freepik.com</a></p>
       </div>
     </div>
     <div class="carousel-item" data-bs-interval="3000">
-      <img src="public/assets/library-with-books.jpg" class="d-block w-100" alt="library">
+      <img src="public/assets/book-library.jpg" class="d-block w-100" alt="library">
       <div class="carousel-caption d-none d-md-block">
         <h5>Second slide label</h5>
-        <p>Book photo created by ikaika - <a href="https://www.freepik.com/photos/book">www.freepik.com</a></p>
+        <p>Background photo created by jcomp - <a href='https://www.freepik.com/photos/background'>www.freepik.com</a></p>
       </div>
     </div>
     <div class="carousel-item" data-bs-interval="3000">
-      <img src="public/assets/library-with-books.jpg" class="d-block w-100" alt="library">
+      <img src="public/assets/book-library.jpg" class="d-block w-100" alt="library">
       <div class="carousel-caption d-none d-md-block">
         <h5>Third slide label</h5>
-        <p>Book photo created by ikaika - <a href="https://www.freepik.com/photos/book">www.freepik.com</a></p>
+        <p>Background photo created by jcomp - <a href='https://www.freepik.com/photos/background'>www.freepik.com</a></p>
       </div>
     </div>
   </div>
@@ -41,25 +51,34 @@
     <div class="col-md">
       <div class="card mb-3">
         <div class="card-body">
-          <h2 class="display-6 fw-normal text-center">Popular Books</h2>
+          <h2 class="display-6 fw-normal text-center mb-3">Popular Books</h2>
+          <% if (typeof popularBooks !== 'undefined') { %>
+            
+          <% } else { %>
+            <p class="text-center">Looks like there is nothing popular...</p>
+          <% } %>
         </div>
       </div>
-      <div class="card">
+      <div class="card m-0">
         <div class="card-body">
-          <h2 class="display-6 fw-normal text-center">Recently Added Books</h2>
-          <div class="row">
-          <% books.forEach(book => { %>
-            <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex">
-              <div class="card">
-                <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
-                <div class="card-body">
-                  <h5 class="card-title fs-6" id="book_title"><%= book.title %></h5>
-                  <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+          <h2 class="display-6 fw-normal text-center mb-3">Recently Added Books</h2>
+          <% if (typeof books !== 'undefined') { %>
+            <div class="row">
+              <% books.forEach(book => { %>
+                <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
+                  <div class="card">
+                    <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
+                    <div class="card-body">
+                      <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
+                      <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              <% }) %>
             </div>
-          <% }) %>
-          </div>
+          <% } else { %>
+            <p class="text-center">Looks like there are no book yet...</p>
+          <% } %>
         </div>
       </div>
     </div>

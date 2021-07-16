@@ -16,10 +16,10 @@ exports.allBooks = (req, res) => {
     .catch(err => console.log(err))
 }
 
-exports.borrowedBooks = (req, res) => {
-  res.send('this is where borrowed books appear')
+exports.userProfile = (req, res) => {
+  // res.send('SOON! this is where user profile appear (user can edit their own profile!)')
 }
 
-exports.userProfile = (req, res) => {
-  res.send('SOON! this is where user profile appear (user can edit their own profile!)')
+exports.borrowedBooks = (req, res) => {
+  res.send('this is where borrowed books appear')
 }
