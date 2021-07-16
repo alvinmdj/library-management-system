@@ -17,6 +17,7 @@ exports.allBooks = (req, res) => {
 }
 
 exports.userProfile = (req, res) => {
+  res.render('customer/profile')
   // res.send('SOON! this is where user profile appear (user can edit their own profile!)')
 }
 

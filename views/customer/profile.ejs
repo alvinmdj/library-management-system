@@ -1,1 +1,22 @@
-<h1>My Profile</h1>
+<style>
+  .img-thumbnail {
+    transition: transform .2s;
+  }
+  .img-thumbnail:hover {
+    transform: scale(1.1);
+  }
+</style>
+
+<div class="container mt-5 mb-5">
+  <div class="row">
+      <div class="col text-center">
+          <img src="public/user_images/default_user.svg" alt="Alvin Martin Djong" class="img-thumbnail rounded-circle" width="200">
+          <h1 class="display-4"><%= user.name %></h1>
+          <p class="lead fst-italic"><%= user.email %></p>
+          <p class="lead">Member since <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(user.created_at) %></p>
+          <p class="lead">Tech Stacks:</p>
+          <p class="lead">NodeJS | ExpressJS | MongoDB | Heroku</p>
+          <button class="btn btn-outline-secondary border border-3" type="button"><span class="lead">Edit Profile</span></button>
+      </div>
+  </div>
+</div>
