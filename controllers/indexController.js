@@ -1,4 +1,15 @@
 const Book = require('../models/Book')
+const User = require('../models/User')
+const { validationResult } = require('express-validator')
+const path = require('path')
+const fs = require('fs')
+
+const removeImage = (filePath) => {
+  filePath = path.join(__dirname, '../', filePath)
+  fs.unlink(filePath, err => {
+    if(err) throw err
+  })
+}
 
 exports.home = (req, res) => {
   Book.find().sort({ created_at: -1 }).limit(12)
@@ -18,7 +29,31 @@ exports.allBooks = (req, res) => {
 
 exports.userProfile = (req, res) => {
   res.render('customer/profile')
-  // res.send('SOON! this is where user profile appear (user can edit their own profile!)')
+}
+
+exports.editProfile = (req, res) => {
+  res.render('customer/profile-edit')
+}
+
+exports.updateProfile = async (req, res) => {
+  const { name, email } = req.body
+
+  const errors = validationResult(req)
+  if(!errors.isEmpty()) {
+    try {
+      if(req.file) removeImage(req.file.path)
+      const user = await User.findById(req.body.id)
+      res.render('customer/profile-edit', {
+        errors: errors.array(),
+        user,
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  } else {
+    res.send('success')
+    // cek lagi jika profile_pic yg lama === default_user.svg, jangan dihapus karena bakal dipake terus
+  }
 }
 
 exports.cart = (req, res) => {

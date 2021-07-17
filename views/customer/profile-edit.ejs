@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Edit Profile</h2>
+      <form method="POST" action="/profile?_method=PUT" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<%= user.id %>">
+        <input type="hidden" name="oldEmail" value="<%= user.email %>">
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="text" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+          <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(err => { %>
+              <% if (err.param === 'email') { %>
+                <p class="text-danger fw-bold mb-0"><%= err.msg %></p>
+              <% } %>
+            <% }) %>
+          <% } %>
+        </div>
+        <div class="mb-3">
+          <label for="image-preview" class="form-label">Image Preview</label><br>
+          <img class="image-preview img-thumbnail rounded-circle" src="<%= user.profilePicturePath %>" alt="image preview" width="150" height="200">
+        </div>
+        <div class="mb-3">
+          <label for="profile_picture" class="form-label">Profile Picture</label>
+          <input class="form-control" type="file" id="profile_picture" name="profile_picture">
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Update Profile</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const profilePicture = document.querySelector('#profile_picture')
+  const imagePreview = document.querySelector('.image-preview')
+
+  profilePicture.addEventListener('change', () => {
+    const url = URL.createObjectURL(profilePicture.files[0])
+    imagePreview.src = url
+  });
+</script>

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const { isEmail } = require('validator')
 const bcrypt = require('bcrypt')
+const path = require('path')
+
+const profilePictureBasePath = 'public/user_images'
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -21,6 +24,10 @@ const userSchema = new mongoose.Schema({
     required: [true, 'This field is required'],
     minlength: [6, 'The minimum password length is 6 characters'],
     trim: true,
+  },
+  profile_picture: {
+    type: String,
+    default: 'default_user.svg'
   },
   role: {
     type: Number,
@@ -51,5 +58,11 @@ userSchema.statics.login = async function (email, password) {
   }
   throw Error('Incorrect email')
 }
+
+userSchema.virtual('profilePicturePath').get(function() {
+  if (this.profile_picture !== null) {
+    return path.join('/', profilePictureBasePath, this.profile_picture)
+  }
+})
 
 module.exports = mongoose.model('user', userSchema)

@@ -10,7 +10,7 @@
             <input type="hidden" name="oldISBN" value="<%= book.oldISBN || book.isbn %>">
             <div class="mb-3">
               <label for="isbn" class="form-label">ISBN</label>
-              <input type="text" class="form-control" id="isbn" name="isbn" value="<%= book.isbn %>" required >
+              <input type="text" class="form-control" id="isbn" name="isbn" value="<%= book.isbn %>" required>
               <% if (typeof errors !== 'undefined') { %>
                 <% errors.forEach(err => { %>
                   <% if (err.param === 'isbn') { %>
@@ -88,9 +88,6 @@
   cover_image.addEventListener('change', () => {
     const url = URL.createObjectURL(cover_image.files[0])
     imagePreview.src = url
-    imagePreview.alt = "image preview"
-    imagePreview.width = "150"
-    imagePreview.height = "200"
-    console.log(url)
+    // console.log(url)
   });
 </script>
