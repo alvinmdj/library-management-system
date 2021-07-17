@@ -21,10 +21,15 @@ const genres = [
 ]
 
 const removeImage = (filePath) => {
-  filePath = path.join(__dirname, '../', filePath)
-  fs.unlink(filePath, err => {
-    if(err) throw err
-  })
+  try {
+    filePath = path.join(__dirname, '../', filePath)
+    fs.unlink(filePath, err => {
+      if(err) throw err
+    })
+  } catch(err) {
+    res.redirect('/admin')
+    console.log(err)
+  }
 }
 
 exports.admin_dashboard = (req, res) => {
@@ -73,7 +78,7 @@ exports.add_book = (req, res) => {
   const { isbn, title, author, publish_year, page_count, genre, description, stock } = req.body
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
-    removeImage(req.file.path)
+    removeImage(req.files.cover_image[0].path)
     res.render('admin/book-add', { 
       genres,
       errors: errors.array(),
@@ -86,7 +91,7 @@ exports.add_book = (req, res) => {
       stock: stock || ''
     })
   } else {
-    const cover_image = req.file.filename
+    const cover_image = req.files.cover_image[0].filename
     Book.create({ isbn, title, author, publish_year, page_count, genre, description, stock, cover_image })
       .then(result => {
         req.flash('msg', 'New book has been added!')
@@ -119,7 +124,7 @@ exports.update_book = async (req, res) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
     try {
-      if(req.file) removeImage(req.file.path)
+      if(req.files.cover_image) removeImage(req.files.cover_image[0].path)
       const book = await Book.findById(req.body.id)
       res.render('admin/book-update', {
         genres,
@@ -131,13 +136,13 @@ exports.update_book = async (req, res) => {
     }
   } else {
     let cover_image
-    if(req.file) {
+    if(req.files.cover_image) {
       Book.findById(req.body.id)
         .then(book => {
           removeImage(book.coverImagePath)
         })
         .catch(err => console.log(err))
-      cover_image = req.file.filename
+      cover_image = req.files.cover_image[0].filename
     } else {
       try {
         const book = await Book.findById(req.body.id)

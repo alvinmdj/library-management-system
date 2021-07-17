@@ -21,7 +21,11 @@ const app = express()
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/images')
+    if(file.fieldname === 'cover_image') {
+      cb(null, 'public/images')
+    } else {
+      cb(null, 'public/user_images')
+    }
   },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}-${Date.now()}-${file.originalname}`)
@@ -43,7 +47,6 @@ app.use(expressLayouts)
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(multer({ storage, fileFilter }).single('cover_image'))
 app.use(methodOverride('_method'))
 app.use(cookieParser('secret'))
 app.use(session({
@@ -53,6 +56,17 @@ app.use(session({
   saveUninitialized: true,
 }))
 app.use(flash())
+app.use(multer({ storage, fileFilter })
+  .fields([
+    {
+      name: 'cover_image',
+      maxCount: 1,
+    },
+    {
+      name: 'profile_picture',
+      maxCount: 1,
+    }
+  ]))
 
 app.get('*', checkUser)
 app.use('/', indexRoutes)

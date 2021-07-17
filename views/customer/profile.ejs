@@ -7,10 +7,15 @@
   }
 </style>
 
-<div class="container mt-5 mb-5 p-5 border border-5 rounded-circle" style="width: 50%;">
+<div class="container mt-5 mb-5 p-5 border border-5 rounded-circle mx-auto" style="width: 50%;">
   <div class="row">
       <div class="col text-center">
-          <img src="public/user_images/default_user.svg" alt="<%= user.name %>" class="img-thumbnail rounded-circle mb-3" width="200">
+        <% if (msg.length !== 0) { %>
+          <div class="alert alert-info fw-bold rounded-pill col-md-5 mx-auto" role="alert">
+            <%= msg %>
+          </div>
+        <% } %>
+          <img src="<%= user.profilePicturePath %>" alt="<%= user.name %>" class="img-thumbnail rounded-circle mb-3" width="200">
           <h1 class="display-4"><%= user.name %></h1>
           <p class="lead fst-italic"><%= user.email %></p>
           <p class="lead">Member since <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(user.created_at) %></p>

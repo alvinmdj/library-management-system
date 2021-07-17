@@ -11,7 +11,7 @@
               <input type="text" class="form-control" id="isbn" name="isbn" required <% if (typeof isbn !== 'undefined') { %> value="<%= isbn %>" <% } %>>
               <% if (typeof errors !== 'undefined') { %>
                 <% errors.forEach(err => { %>
-                  <% if (err.param === 'publish_year') { %>
+                  <% if (err.param === 'isbn') { %>
                     <p class="text-danger fw-bold mb-0"><%= err.msg %></p>
                   <% } %>
                 <% }) %>
