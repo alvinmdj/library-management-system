@@ -9,14 +9,6 @@ const cartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'book'
   },
-  borrow_date: {
-    required: Date,
-    required: tru
-  },
-  return_date: {
-    required: Date,
-    required: tru
-  }
 },
 {
   timestamps: {
@@ -31,8 +23,8 @@ module.exports = mongoose.model('Cart', cartSchema)
   // CART CONTROLLER USE REQUIREAUTH MIDDLEWARE
   user_id
   book_id
-  borrow_date
-  return_date
+  // borrow_date might not needed
+  // return_date also not needed
   timestamps
   // if book removed from cart, also remove the cart
 */
