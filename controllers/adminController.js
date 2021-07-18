@@ -38,7 +38,7 @@ exports.admin_dashboard = (req, res) => {
 
 exports.books = (req, res) => {
   let currentPage = req.params.page || 1
-  let perPage = req.query.perPage || 5
+  let perPage = req.query.perPage || 10
   let totalBook
   let query = Book.find()
 
