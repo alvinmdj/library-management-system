@@ -24,11 +24,21 @@
                   <td colspan="4" class="text-center">Your cart is still empty...</td>
                 </tr>
               <% } %>
+              <% let outOfStock = 0 %>
               <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
                 <tr>
                   <th scope="row"><%= ++i %></th>
                   <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" width="75" height="100"></th>
-                  <td><%= item.book.title %></td>
+                  <td>
+                    <%= item.book.title %>
+                    <% if (item.book.stock === 0) { %>
+                      <% outOfStock = 1 %> 
+                      <div class="alert alert-danger fw-bold text-center mt-2" role="alert">
+                        This book is out of stock!
+                        Please kindly remove this book before proceeds.
+                      </div>
+                    <% } %>
+                  </td>
                   <td>
                     <form action="/cart?_method=DELETE" method="POST" class="d-grid gap-1 text-center">
                       <input type="hidden" name="item_id" value="<%= item._id %>" />
@@ -40,7 +50,7 @@
               <% }) %>
             </tbody>
           </table>
-          <% if (cartItems.filter(item => item.user.id === user.id).length > 0) { %>
+          <% if (cartItems.filter(item => item.user.id === user.id).length > 0 && outOfStock == 0) { %>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <a href="/books" class="btn btn-outline-secondary">Look for another book</a>
               <a href="" class="btn btn-outline-primary">Borrow book now</a>
