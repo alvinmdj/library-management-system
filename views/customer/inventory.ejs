@@ -1,1 +1,30 @@
 <h1>My Book</h1>
+<% borrowedBook.forEach(book => { %>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
+    <div class="card">
+      <img src="<%= book.borrowed_book.coverImagePath %>" class="card-img-top" alt="<%= book.borrowed_book.title %>" width="150" height="200">
+      <div class="card-body">
+        <h5 class="card-title fs-6" id="book_title" title="<%= book.borrowed_book.title %>"><%= book.borrowed_book.title %></h5>
+        <% if (book.borrowed_book.stock !== 0) { %>
+          <div class="d-grid d-md-block text-center">
+            <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">Details</button>
+            <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
+          </div>
+          <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
+            <% if (user) { %>
+              <input type="hidden" name="user_id" value="<%= user.id %>">
+            <% } %>
+            <input type="hidden" name="book_id" value="<%= book.borrowed_book.id %>">
+            <input type="hidden" name="prev_url" value="/books">
+            <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
+          </form>
+        <% } else { %>
+          <div class="d-grid text-center">
+            <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">Details</button>
+            <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+<% }) %>

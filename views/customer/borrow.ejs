@@ -1,0 +1,77 @@
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-8 text-center mx-auto">
+      <div class="bg-light border rounded-3 p-5">
+        <h1 class="display-4 mb-5">Borrow Books</h1>
+        <div class="table-responsive-md pb-3">
+          <table class="table table-hover text-center">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cover Image</th>
+                <th scope="col">Title</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (cartItems.filter(item => item.user.id === user.id).length < 1) { %>
+                <tr>
+                  <td colspan="4" class="text-center">Your cart is still empty...</td>
+                </tr>
+              <% } %>
+              <% let outOfStock = 0 %>
+              <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
+                <tr>
+                  <th scope="row"><%= ++i %></th>
+                  <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" width="75" height="100"></th>
+                  <td><%= item.book.title %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% if (cartItems.filter(item => item.user.id === user.id).length > 0 && outOfStock == 0) { %>
+            <form action="/borrow" method="POST" class="row g-3 text-start">
+              <input type="hidden" name="user_id" value="<%= user.id %>">
+              <div class="col-md-6">
+                <label for="borrowDate" class="form-label">Borrow Date</label>
+                <input type="date" class="form-control" id="borrowDate" name="borrowDate" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="returnDate" class="form-label">Return Date</label>
+                <input type="date" class="form-control" id="returnDate" name="returnDate" required>
+              </div>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-0">
+                <a href="/cart" class="btn btn-outline-secondary">Back to Cart</a>
+                <button type="submit" class="btn btn-outline-primary">Confirm Borrow</button>
+              </div>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const getDate = () => {
+    let today = new Date()
+    let dd = today.getDate()
+    let mm = today.getMonth() + 1   // +1 because start from 0
+    let yyyy = today.getFullYear()
+    
+    if(dd < 10) {
+        dd = '0' + dd
+    } 
+    if(mm < 10) {
+        mm = '0' + mm
+    } 
+
+    today = yyyy + '-' + mm + '-' + dd;
+    // console.log(today);
+    console.log(new Date() - new Date())
+    document.getElementById("borrowDate").value = today;
+  }
+
+  window.onload = function() {
+    getDate();
+  };
+</script>

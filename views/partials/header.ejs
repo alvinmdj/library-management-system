@@ -43,7 +43,7 @@
           </li>
         <% } else { %>
           <li class="nav-item">
-            <a class="nav-link" href="/inventory">Inventory</a>
+            <a class="nav-link" href="/inventory/<%= user.id %>">Inventory</a>
           </li>
           <% if (user.role === 0) { %>
             <li class="nav-item">

@@ -11,6 +11,8 @@ const editProfileValidator = [
   })
 ]
 
+// Create a date validator so return date must be bigger than borrow date
+
 module.exports = {
   editProfileValidator
 }

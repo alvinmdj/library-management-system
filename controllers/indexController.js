@@ -1,6 +1,7 @@
 const Book = require('../models/Book')
 const User = require('../models/User')
 const Cart = require('../models/Cart')
+const BorrowHistory = require('../models/BorrowHistory')
 const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
@@ -43,7 +44,6 @@ exports.editProfile = (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   const { name, email } = req.body
-
   const errors = validationResult(req)
   if(!errors.isEmpty()) {
     try {
@@ -95,23 +95,37 @@ exports.cart = (req, res) => {
     .catch(err => console.log(err))
 }
 
-exports.postToCart = (req, res) => {
+exports.postToCart = async (req, res) => {
   const { user_id, book_id, prev_url } = req.body
-  Cart.find({ book: book_id })
-    .then(result => {
-      if(result.length !== 0) {
-        req.flash('msg', 'That book is already in your cart...')
-        res.redirect(prev_url)
-      } else {
-        Cart.create({ user: user_id, book: book_id })
-        .then(result => {
-          req.flash('msg', 'Book has been added to your cart!'),
-          res.redirect(prev_url)
-        })
-        .catch(err => console.log(err))
-      }
+
+  try {
+    const inInventory = await BorrowHistory.find({
+      borrowed_by: user_id,
+      borrowed_book: book_id,
+      return_date: { $gte: new Date() }
     })
-    .catch(err => console.log(err))
+    Cart.find({ book: book_id })
+      .then(result => {
+        if(inInventory.length !== 0) {
+          req.flash('msg', 'That book is already in your inventory...')
+          res.redirect(prev_url)
+        } else if(result.length !== 0) {
+          req.flash('msg', 'That book is already in your cart...')
+          res.redirect(prev_url)
+        } else {
+          Cart.create({ user: user_id, book: book_id })
+          .then(result => {
+            req.flash('msg', 'Book has been added to your cart!'),
+            res.redirect(prev_url)
+          })
+          .catch(err => console.log(err))
+        }
+      })
+      .catch(err => console.log(err))
+  } catch(err) {
+    console.log(err)
+  }
+
 }
 
 exports.deleteCartItem = async (req, res) => {
@@ -126,6 +140,47 @@ exports.deleteCartItem = async (req, res) => {
   }
 }
 
-exports.borrowedBooks = (req, res) => {
-  res.render('customer/inventory')
+exports.getBorrow = (req, res) => {
+  Cart.find().populate('user').populate('book')
+    .then(result => {
+      res.render('customer/borrow', { cartItems: result })
+    })
+    .catch(err => console.log(err))
+}
+
+exports.postBorrow = (req, res) => {
+  const { user_id, borrowDate, returnDate } = req.body
+  // console.log((new Date(returnDate) - new Date(borrowDate)) / (3600000 * 24)) // return different in days
+
+  Cart.find({ user: user_id })
+    .then(cartItem => {
+      cartItem.forEach(item => {
+        BorrowHistory.create({
+          borrowed_by: user_id,
+          borrowed_book: item.book,
+          borrow_date: new Date(borrowDate),
+          return_date: new Date(returnDate)
+        })
+          .then(result => {
+            // Decrement stock by 1
+            Cart.find({ user: user_id }).deleteMany()
+              .then(result => {
+                req.flash('msg', "Book successfully borrowed!")
+                res.redirect('/')
+              })
+              .catch(err => console.log(err))
+          })
+          .catch(err => console.log(err))
+      });
+    })
+    .catch(err => console.log(err))
+}
+
+exports.borrowedBooks = async (req, res) => {
+  try {
+    const borrowedBook = await BorrowHistory.find({ borrowed_by: req.params.id ,return_date: { $gte: new Date() } }).populate('borrowed_book')
+    res.render('customer/inventory', { borrowedBook })
+  } catch(err) {
+    console.log(err)
+  }
 }
