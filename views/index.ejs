@@ -76,7 +76,9 @@
                           <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
                         </div>
                         <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
-                          <input type="hidden" name="user_id" value="<%= user.id %>">
+                          <% if (user) { %>
+                            <input type="hidden" name="user_id" value="<%= user.id %>">
+                          <% } %>
                           <input type="hidden" name="book_id" value="<%= book.id %>">
                           <input type="hidden" name="prev_url" value="/">
                           <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
