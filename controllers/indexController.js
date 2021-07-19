@@ -87,9 +87,13 @@ exports.updateProfile = async (req, res) => {
 }
 
 exports.cart = (req, res) => {
-  res.send('this is cart')
+  res.render('customer/cart')
+}
+
+exports.postToCart = (req, res) => {
+  res.send('posted to cart')
 }
 
 exports.borrowedBooks = (req, res) => {
-  res.send('this is where borrowed books appear')
+  res.render('customer/inventory')
 }

@@ -2,3 +2,21 @@
   color: rgb(255, 0, 0);
   font-weight: bold;
 }
+
+#book_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cart {
+  max-width: 95%;
+}
+
+@media screen and (max-width: 768px) {
+  .cart {
+    max-width: 100%;
+  }
+}

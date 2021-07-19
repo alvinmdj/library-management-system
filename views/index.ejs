@@ -1,12 +1,4 @@
-<style>
-  #book_title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-</style>
+<link rel="stylesheet" href="public/css/styles.css">
 
 <div id="carouselExampleCaptions" class="carousel slide mb-4" data-bs-ride="carousel">
   <div class="carousel-indicators">
@@ -70,7 +62,13 @@
                     <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
                     <div class="card-body">
                       <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
-                      <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                      <div class="d-grid d-md-block text-center">
+                        <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                        <button class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</button>
+                      </div>
+                      <div class="cart d-grid mx-auto">
+                        <button class="btn btn-outline-primary btn-sm" type="button">Add to Cart</button>
+                      </div>
                     </div>
                   </div>
                 </div>

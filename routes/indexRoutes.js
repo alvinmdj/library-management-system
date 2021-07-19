@@ -12,12 +12,13 @@ router.get('/books', indexController.allBooks)
 // User Profile
 router.get('/profile', requireAuth, indexController.userProfile)
 router.get('/profile/edit', requireAuth, indexController.editProfile)
-//ERROR single('cover_image') -> harusnya profile_picture, tapi ga bisa
 router.put('/profile', requireAuth, editProfileValidator, indexController.updateProfile)
 
+// Cart
 router.get('/cart', requireAuth, indexController.cart)
+router.post('/cart', requireAuth, indexController.postToCart)
 
+// Borrowed Book
 router.get('/inventory', requireAuth, indexController.borrowedBooks)
-
 
 module.exports = router
