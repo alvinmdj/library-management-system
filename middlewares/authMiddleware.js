@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const Cart = require('../models/Cart')
 
 const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt
@@ -51,7 +52,9 @@ const checkUser = (req, res, next) => {
         next()
       } else {
         let user = await User.findById(decodedToken.id)
+        let itemCount = await Cart.find({ user: user.id }).countDocuments()
         res.locals.user = user
+        res.locals.itemCount = itemCount
         next()
       }
     })

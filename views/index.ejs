@@ -41,6 +41,11 @@
 <div class="container mb-4">
   <div class="row">
     <div class="col-md">
+      <% if (msg.length !== 0) { %>
+        <div class="alert alert-info fw-bold text-center" role="alert">
+          <%= msg %>
+        </div>
+      <% } %>
       <div class="card mb-3">
         <div class="card-body">
           <h2 class="display-6 fw-normal text-center mb-3">Popular Books</h2>

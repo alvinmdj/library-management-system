@@ -17,6 +17,7 @@ router.put('/profile', requireAuth, editProfileValidator, indexController.update
 // Cart
 router.get('/cart', requireAuth, indexController.cart)
 router.post('/cart', requireAuth, indexController.postToCart)
+router.delete('/cart', requireAuth, indexController.deleteCartItem)
 
 // Borrowed Book
 router.get('/inventory', requireAuth, indexController.borrowedBooks)

@@ -1,18 +1,43 @@
 <div class="container mt-5 mb-5">
   <div class="row">
-    <div class="col-md-10 text-center mx-auto">
-      <div class="bg-light border rounded-3 p-3">
+    <div class="col-md-8 text-center mx-auto">
+      <div class="bg-light border rounded-3 p-5">
         <h1 class="display-4 mb-5 mt-5">My Cart</h1>
         <div class="table-responsive-md">
+          <% if (msg.length !== 0) { %>
+            <div class="alert alert-info fw-bold text-center" role="alert">
+              <%= msg %>
+            </div>
+          <% } %>
           <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col">Cover Image</th>
                 <th scope="col">Title</th>
-                <th scope="col">Author</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
+            <tbody>
+              <% if (cartItems.filter(item => item.user.id === user.id).length < 1) { %>
+                <tr>
+                  <td colspan="4" class="text-center">Your cart is still empty...</td>
+                </tr>
+              <% } %>
+              <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
+                <tr>
+                  <th scope="row"><%= ++i %></th>
+                  <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" width="75" height="100"></th>
+                  <td><%= item.book.title %></td>
+                  <td>
+                    <form action="/cart?_method=DELETE" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                      <input type="hidden" name="item_id" value="<%= item._id %>" />
+                      <button type="submit" class="btn btn-danger badge" onclick="return confirm('Are you sure to delete this book?')">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
           </table>
         </div>
       </div>

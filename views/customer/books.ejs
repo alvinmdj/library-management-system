@@ -2,6 +2,11 @@
 
 <h2 class="display-5 text-center mt-3 mb-3">All Books</h2>
 <div class="container mb-4">
+  <% if (msg.length !== 0) { %>
+    <div class="alert alert-info fw-bold text-center" role="alert">
+      <%= msg %>
+    </div>
+  <% } %>
   <div class="card">
     <div class="card-body">
       <div class="row">
@@ -11,13 +16,22 @@
             <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
             <div class="card-body">
               <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
-              <div class="d-grid d-md-block text-center">
-                <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
-                <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
-              </div>
-              <form class="cart d-grid mx-auto" action="/cart" method="POST">
-                <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
-              </form>
+              <% if (book.stock !== 0) { %>
+                <div class="d-grid d-md-block text-center">
+                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                  <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
+                </div>
+                <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
+                  <input type="hidden" name="user_id" value="<%= user.id %>">
+                  <input type="hidden" name="book_id" value="<%= book.id %>">
+                  <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
+                </form>
+              <% } else { %>
+                <div class="d-grid text-center">
+                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                  <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
+                </div>
+              <% } %> 
             </div>
           </div>
         </div>
