@@ -9,38 +9,44 @@
   <% } %>
   <div class="card">
     <div class="card-body">
-      <div class="row">
-      <% books.forEach(book => { %>
-        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
-          <div class="card">
-            <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
-            <div class="card-body">
-              <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
-              <% if (book.stock !== 0) { %>
-                <div class="d-grid d-md-block text-center">
-                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
-                  <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
+      <% if (typeof books !== 'undefined') { %>
+        <div class="row">
+          <% books.forEach(book => { %>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
+              <div class="card">
+                <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
+                <div class="card-body">
+                  <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
+                  <% if (book.stock !== 0) { %>
+                    <div class="d-grid d-md-block text-center">
+                      <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                      <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
+                    </div>
+                    <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
+                      <input type="hidden" name="user_id" value="<%= user.id %>">
+                      <input type="hidden" name="book_id" value="<%= book.id %>">
+                      <input type="hidden" name="prev_url" value="/books">
+                      <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
+                    </form>
+                  <% } else { %>
+                    <div class="d-grid text-center">
+                      <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                      <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
+                    </div>
+                  <% } %> 
                 </div>
-                <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
-                  <input type="hidden" name="user_id" value="<%= user.id %>">
-                  <input type="hidden" name="book_id" value="<%= book.id %>">
-                  <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
-                </form>
-              <% } else { %>
-                <div class="d-grid text-center">
-                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
-                  <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
-                </div>
-              <% } %> 
+              </div>
             </div>
-          </div>
+          <% }) %>
         </div>
-      <% }) %>
-      </div>
+      <% } else { %>
+        <p class="text-center">Looks like there are no book yet...</p>
+      <% } %>
     </div>
   </div>
 </div>
 
+<!-- Book Detail Modal -->
 <% books.forEach(book => { %>
   <div class="modal fade" id="bookDetailModal<%= book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">

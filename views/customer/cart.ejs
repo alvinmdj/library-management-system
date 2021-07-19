@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-8 text-center mx-auto">
       <div class="bg-light border rounded-3 p-5">
-        <h1 class="display-4 mb-5 mt-5">My Cart</h1>
-        <div class="table-responsive-md">
+        <h1 class="display-4 mb-5">My Cart</h1>
+        <div class="table-responsive-md pb-3">
           <% if (msg.length !== 0) { %>
             <div class="alert alert-info fw-bold text-center" role="alert">
               <%= msg %>
             </div>
           <% } %>
-          <table class="table table-hover">
+          <table class="table table-hover text-center">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -30,8 +30,9 @@
                   <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" width="75" height="100"></th>
                   <td><%= item.book.title %></td>
                   <td>
-                    <form action="/cart?_method=DELETE" method="POST" class="d-grid gap-2 d-md-block mb-0">
+                    <form action="/cart?_method=DELETE" method="POST" class="d-grid gap-1 text-center">
                       <input type="hidden" name="item_id" value="<%= item._id %>" />
+                      <button class="btn btn-info badge" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= item.book.id %>">Details</button>
                       <button type="submit" class="btn btn-danger badge" onclick="return confirm('Are you sure to delete this book?')">Remove</button>
                     </form>
                   </td>
@@ -39,8 +40,51 @@
               <% }) %>
             </tbody>
           </table>
+          <% if (cartItems.filter(item => item.user.id === user.id).length > 0) { %>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a href="/books" class="btn btn-outline-secondary">Look for another book</a>
+              <a href="" class="btn btn-outline-primary">Borrow book now</a>
+            </div>
+          <% } %>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Book Detail Modal -->
+<% cartItems.filter(item => item.user.id === user.id).map(item => { %>
+  <div class="modal fade" id="bookDetailModal<%= item.book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookDetailModalLabel">Book Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <img src="<%= item.book.coverImagePath %>" class="img-fluid">
+                    </div>
+                    <div class="col-md">
+                        <ul class="list-group">
+                            <li class="list-group-item"><h4><%= `${item.book.title} (${item.book.publish_year})` %></h4></li>
+                            <li class="list-group-item"><strong>Stock : </strong> <%= item.book.stock %></li>
+                            <li class="list-group-item"><strong>ISBN : </strong> <%= item.book.isbn %></li>
+                            <li class="list-group-item"><strong>Author : </strong> <%= item.book.author %></li>
+                            <li class="list-group-item"><strong>Page Count : </strong> <%= item.book.page_count %> pages</li>
+                            <li class="list-group-item"><strong>Genre : </strong> <%= item.book.genre %></li>
+                            <li class="list-group-item"><strong>Description : </strong> <br> <%= item.book.description %></li>
+                        </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<% }) %>

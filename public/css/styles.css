@@ -3,6 +3,10 @@
   font-weight: bold;
 }
 
+.carousel-img {
+  max-height: 650px;
+}
+
 #book_title {
   overflow: hidden;
   text-overflow: ellipsis;

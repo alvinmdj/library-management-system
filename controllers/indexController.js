@@ -96,17 +96,17 @@ exports.cart = (req, res) => {
 }
 
 exports.postToCart = (req, res) => {
-  const { user_id, book_id } = req.body
+  const { user_id, book_id, prev_url } = req.body
   Cart.find({ book: book_id })
     .then(result => {
       if(result.length !== 0) {
-        req.flash('msg', 'That book is already in your cart')
-        res.redirect('/')
+        req.flash('msg', 'That book is already in your cart...')
+        res.redirect(prev_url)
       } else {
         Cart.create({ user: user_id, book: book_id })
         .then(result => {
-          req.flash('msg', 'Book has been added to your cart'),
-          res.redirect('/')
+          req.flash('msg', 'Book has been added to your cart!'),
+          res.redirect(prev_url)
         })
         .catch(err => console.log(err))
       }
