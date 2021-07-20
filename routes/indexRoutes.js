@@ -1,12 +1,12 @@
 const express = require('express')
 const indexController = require('../controllers/indexController')
 const { requireAuth } = require('../middlewares/authMiddleware')
-const { editProfileValidator } = require('../middlewares/userMiddleware')
+const { editProfileValidator, borrowValidator } = require('../middlewares/userMiddleware')
 
 const router = express.Router()
 
+// Books
 router.get('/', indexController.home)
-
 router.get('/books', indexController.allBooks)
 
 // User Profile
@@ -21,7 +21,7 @@ router.delete('/cart', requireAuth, indexController.deleteCartItem)
 
 // Borrow
 router.get('/borrow', requireAuth, indexController.getBorrow)
-router.post('/borrow', requireAuth, indexController.postBorrow)
+router.post('/borrow', requireAuth, borrowValidator, indexController.postBorrow)
 router.get('/inventory/:id', requireAuth, indexController.borrowedBooks)
 
 module.exports = router

@@ -1,4 +1,7 @@
 <h1>My Book</h1>
+<% if(borrowedBook.length === 0) { %>
+  <p>No borrowed books yet.</p>
+<% } %>
 <% borrowedBook.forEach(book => { %>
   <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
     <div class="card">

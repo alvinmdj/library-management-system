@@ -13,11 +13,6 @@
               </tr>
             </thead>
             <tbody>
-              <% if (cartItems.filter(item => item.user.id === user.id).length < 1) { %>
-                <tr>
-                  <td colspan="4" class="text-center">Your cart is still empty...</td>
-                </tr>
-              <% } %>
               <% let outOfStock = 0 %>
               <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
                 <tr>
@@ -39,6 +34,13 @@
                 <label for="returnDate" class="form-label">Return Date</label>
                 <input type="date" class="form-control" id="returnDate" name="returnDate" required>
               </div>
+              <% if (typeof errors !== 'undefined') { %>
+                <% errors.forEach(err => { %>
+                  <% if (err.param === 'returnDate') { %>
+                    <p class="text-danger fw-bold mb-0"><%= err.msg %></p>
+                  <% } %>
+                <% }) %>
+              <% } %>
               <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-0">
                 <a href="/cart" class="btn btn-outline-secondary">Back to Cart</a>
                 <button type="submit" class="btn btn-outline-primary">Confirm Borrow</button>

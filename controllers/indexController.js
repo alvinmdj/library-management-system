@@ -99,10 +99,12 @@ exports.postToCart = async (req, res) => {
   const { user_id, book_id, prev_url } = req.body
 
   try {
+    let date = new Date()
+    date.setDate(date.getDate() - 1)
     const inInventory = await BorrowHistory.find({
       borrowed_by: user_id,
       borrowed_book: book_id,
-      return_date: { $gte: new Date() }
+      return_date: { $gte: date }
     })
     Cart.find({ book: book_id })
       .then(result => {
@@ -125,7 +127,6 @@ exports.postToCart = async (req, res) => {
   } catch(err) {
     console.log(err)
   }
-
 }
 
 exports.deleteCartItem = async (req, res) => {
@@ -148,37 +149,48 @@ exports.getBorrow = (req, res) => {
     .catch(err => console.log(err))
 }
 
-exports.postBorrow = (req, res) => {
+exports.postBorrow = async (req, res) => {
   const { user_id, borrowDate, returnDate } = req.body
-  // console.log((new Date(returnDate) - new Date(borrowDate)) / (3600000 * 24)) // return different in days
-
-  Cart.find({ user: user_id })
-    .then(cartItem => {
-      cartItem.forEach(item => {
-        BorrowHistory.create({
+  const errors = validationResult(req)
+  if(!errors.isEmpty()) {
+    try {
+      const user = await User.findById(user_id)
+      const cart = await Cart.find().populate('user').populate('book')
+      console.log(cart)
+      res.render('customer/borrow', {
+        errors: errors.array(),
+        user,
+        cartItems: cart
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  } else {
+    try {
+      const cartItems = await Cart.find({ user: user_id })
+      cartItems.forEach(async (item) => {
+        const borrow = await BorrowHistory.create({
           borrowed_by: user_id,
           borrowed_book: item.book,
           borrow_date: new Date(borrowDate),
           return_date: new Date(returnDate)
         })
-          .then(result => {
-            // Decrement stock by 1
-            Cart.find({ user: user_id }).deleteMany()
-              .then(result => {
-                req.flash('msg', "Book successfully borrowed!")
-                res.redirect('/')
-              })
-              .catch(err => console.log(err))
-          })
-          .catch(err => console.log(err))
-      });
-    })
-    .catch(err => console.log(err))
+        // decrement stock
+        const cart = await Cart.find({ user: user_id }).deleteMany()
+        req.flash('msg', "Book successfully borrowed!")
+        res.redirect('/')
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  }
 }
 
 exports.borrowedBooks = async (req, res) => {
   try {
-    const borrowedBook = await BorrowHistory.find({ borrowed_by: req.params.id ,return_date: { $gte: new Date() } }).populate('borrowed_book')
+    let date = new Date()
+    date.setDate(date.getDate() - 1)  // decrement by 1 day so the borrowed books still appear at the return date.
+    const borrowedBook = await BorrowHistory.find({ borrowed_by: req.params.id ,return_date: { $gte: date } }).populate('borrowed_book')
     res.render('customer/inventory', { borrowedBook })
   } catch(err) {
     console.log(err)

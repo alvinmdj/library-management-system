@@ -16,6 +16,10 @@ const borrowHistorySchema = new mongoose.Schema({
   return_date: {
     type: Date,
     required: true
+  },
+  status: {
+    type: String,
+    default: 'In Progress'
   }
 },
 {
@@ -26,11 +30,3 @@ const borrowHistorySchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('BorrowHistory', borrowHistorySchema)
-
-/*
-  user_id
-  book_id
-  borrow_date
-  return_date // depends of cart return date or when user returned earlier
-  timestamps
-*/

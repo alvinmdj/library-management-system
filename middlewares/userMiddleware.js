@@ -11,8 +11,23 @@ const editProfileValidator = [
   })
 ]
 
-// Create a date validator so return date must be bigger than borrow date
+const borrowValidator = [
+  body('returnDate').custom((value, { req }) => {
+    const { borrowDate } = req.body
+    // console.log((new Date(value) - new Date(borrowDate)) / (3600000 * 24)) // return different in days
+    const dateDifference = (new Date(value) - new Date(borrowDate)) / (3600000 * 24)
+    // console.log(dateDifference)
+    if(dateDifference < 1) {
+        throw new Error('Return date must be higher than borrow date.')
+    }
+    if(dateDifference > 30) {
+      throw new Error("Return date cannot exceeds more than 30 days after borrow date.")
+    }
+    return true
+  })
+]
 
 module.exports = {
-  editProfileValidator
+  editProfileValidator,
+  borrowValidator
 }
