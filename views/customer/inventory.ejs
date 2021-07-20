@@ -1,33 +1,75 @@
-<h1>My Book</h1>
-<% if(borrowedBook.length === 0) { %>
-  <p>No borrowed books yet.</p>
-<% } %>
-<% borrowedBook.forEach(book => { %>
-  <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
-    <div class="card">
-      <img src="<%= book.borrowed_book.coverImagePath %>" class="card-img-top" alt="<%= book.borrowed_book.title %>" width="150" height="200">
-      <div class="card-body">
-        <h5 class="card-title fs-6" id="book_title" title="<%= book.borrowed_book.title %>"><%= book.borrowed_book.title %></h5>
-        <% if (book.borrowed_book.stock !== 0) { %>
-          <div class="d-grid d-md-block text-center">
-            <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">Details</button>
-            <a href="" class="btn btn-outline-success btn-sm mb-1" type="button">Borrow</a>
-          </div>
-          <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
-            <% if (user) { %>
-              <input type="hidden" name="user_id" value="<%= user.id %>">
-            <% } %>
-            <input type="hidden" name="book_id" value="<%= book.borrowed_book.id %>">
-            <input type="hidden" name="prev_url" value="/books">
-            <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
-          </form>
-        <% } else { %>
-          <div class="d-grid text-center">
-            <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">Details</button>
-            <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
-          </div>
+<link rel="stylesheet" href="../public/css/styles.css">
+
+<div class="display-5 text-center mt-3 mb-3">My Book</div>
+<div class="container mb-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <% if(borrowedBook.length === 0) { %>
+          <p>No borrowed books yet.</p>
         <% } %>
+        <% borrowedBook.forEach(book => { %>
+          <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
+            <div class="card">
+              <img src="<%= book.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= book.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">
+              <div class="card-body">
+                <h5 class="card-title fs-6" id="book_title" title="<%= book.borrowed_book.title %>"><%= book.borrowed_book.title %></h5>
+                <form class="cart d-grid mx-auto mb-0" action="/read" method="POST">
+                  <% if (user) { %>
+                    <input type="hidden" name="user_id" value="<%= user.id %>">
+                  <% } %>
+                  <input type="hidden" name="book_id" value="<%= book.id %>">
+                  <button class="btn btn-outline-success btn-sm mb-1" type="submit">Read Book</button>
+                </form>
+                <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
+                  <% if (user) { %>
+                    <input type="hidden" name="user_id" value="<%= user.id %>">
+                  <% } %>
+                  <input type="hidden" name="book_id" value="<%= book.id %>">
+                  <button class="btn btn-outline-primary btn-sm" type="submit">Return Book</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Book Detail Modal -->
+<% borrowedBook.forEach(book => { %>
+  <div class="modal fade" id="bookDetailModal<%= book.borrowed_book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookDetailModalLabel">Book Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <img src="<%= book.borrowed_book.coverImagePath %>" class="img-fluid">
+                    </div>
+                    <div class="col-md">
+                        <ul class="list-group">
+                            <li class="list-group-item"><h4><%= `${book.borrowed_book.title} (${book.borrowed_book.publish_year})` %></h4></li>
+                            <li class="list-group-item"><strong>Stock : </strong> <%= book.borrowed_book.stock %></li>
+                            <li class="list-group-item"><strong>ISBN : </strong> <%= book.borrowed_book.isbn %></li>
+                            <li class="list-group-item"><strong>Author : </strong> <%= book.borrowed_book.author %></li>
+                            <li class="list-group-item"><strong>Page Count : </strong> <%= book.borrowed_book.page_count %> pages</li>
+                            <li class="list-group-item"><strong>Genre : </strong> <%= book.borrowed_book.genre %></li>
+                            <li class="list-group-item"><strong>Description : </strong> <br> <%= book.borrowed_book.description %></li>
+                        </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
   </div>
 <% }) %>

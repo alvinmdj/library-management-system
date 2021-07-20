@@ -177,3 +177,11 @@ exports.delete_book = async (req, res) => {
     console.log(err)
   }
 }
+
+exports.view_orders = (req, res) => {
+  res.send('manage orders page')
+}
+
+exports.view_users = (req, res) => {
+  res.send('manage users page')
+}

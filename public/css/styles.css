@@ -15,6 +15,10 @@
   -webkit-box-orient: vertical;
 }
 
+#img-pointer {
+  cursor: pointer;
+}
+
 .cart {
   max-width: 95%;
 }

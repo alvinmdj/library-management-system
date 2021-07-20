@@ -13,7 +13,6 @@
               </tr>
             </thead>
             <tbody>
-              <% let outOfStock = 0 %>
               <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
                 <tr>
                   <th scope="row"><%= ++i %></th>
@@ -23,7 +22,7 @@
               <% }) %>
             </tbody>
           </table>
-          <% if (cartItems.filter(item => item.user.id === user.id).length > 0 && outOfStock == 0) { %>
+          <% if (cartItems.filter(item => item.user.id === user.id).length > 0) { %>
             <form action="/borrow" method="POST" class="row g-3 text-start">
               <input type="hidden" name="user_id" value="<%= user.id %>">
               <div class="col-md-6">

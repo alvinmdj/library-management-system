@@ -23,5 +23,7 @@ router.delete('/cart', requireAuth, indexController.deleteCartItem)
 router.get('/borrow', requireAuth, indexController.getBorrow)
 router.post('/borrow', requireAuth, borrowValidator, indexController.postBorrow)
 router.get('/inventory/:id', requireAuth, indexController.borrowedBooks)
+router.post('/read', requireAuth, indexController.readBook)
+router.post('/return', requireAuth, indexController.returnBook)
 
 module.exports = router

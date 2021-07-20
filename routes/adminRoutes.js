@@ -18,7 +18,9 @@ router.delete('/book', adminController.delete_book)
 router.get('/book/:page?', adminController.books)
 
 // Manage Orders
+router.get('/orders', adminController.view_orders)
 
 // Manage Users
+router.get('/users', adminController.view_users)
 
 module.exports = router

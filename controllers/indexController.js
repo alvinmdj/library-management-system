@@ -106,7 +106,7 @@ exports.postToCart = async (req, res) => {
       borrowed_book: book_id,
       return_date: { $gte: date }
     })
-    Cart.find({ book: book_id })
+    Cart.find({ user: user_id, book: book_id })
       .then(result => {
         if(inInventory.length !== 0) {
           req.flash('msg', 'That book is already in your inventory...')
@@ -175,7 +175,10 @@ exports.postBorrow = async (req, res) => {
           borrow_date: new Date(borrowDate),
           return_date: new Date(returnDate)
         })
-        // decrement stock
+        const book = await Book.updateMany(
+          { _id: item.book },
+          { $inc: { stock: -1 } }
+        )
         const cart = await Cart.find({ user: user_id }).deleteMany()
         req.flash('msg', "Book successfully borrowed!")
         res.redirect('/')
@@ -195,4 +198,12 @@ exports.borrowedBooks = async (req, res) => {
   } catch(err) {
     console.log(err)
   }
+}
+
+exports.readBook = (req, res) => {
+  res.send('read book')
+}
+
+exports.returnBook = (req, res) => {
+  res.send('return book')
 }
