@@ -179,7 +179,7 @@ exports.postBorrow = async (req, res) => {
         )
         const cart = await Cart.find({ user: user_id }).deleteMany()
         req.flash('msg', "Book successfully borrowed!")
-        return res.redirect('/')
+        return res.redirect(`/inventory/${user_id}`)
       })
     } catch(err) {
       console.log(err)
