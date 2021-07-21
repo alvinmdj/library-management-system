@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="col py-3">
+      <div class="col overflow-auto h-100">
+        <div class="bg-light border rounded-3 p-3">
+          <h2 class="display-4">View Orders</h2>
+          <div class="table-responsive-md">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Borrowed By</th>
+                  <th scope="col">Borrowed Book</th>
+                  <th scope="col">Borrow Date</th>
+                  <th scope="col">Return Date</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% borrowHistory.forEach((history, i) => { %>
+                  <tr>
+                    <th scope="row"><%= ++i %></th>
+                    <td><%= history.borrowed_by.name %></td>
+                    <td><%= history.borrowed_book.title %></td>
+                    <td><%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(history.borrow_date) %></td>
+                    <td><%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(history.return_date) %></td>
+                    <td><%= history.status %><%= /*history.book_returned*/ %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

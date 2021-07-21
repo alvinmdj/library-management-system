@@ -1,4 +1,5 @@
 const Book = require('../models/Book')
+const BorrowHistory = require('../models/BorrowHistory')
 const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
@@ -178,8 +179,44 @@ exports.delete_book = async (req, res) => {
   }
 }
 
-exports.view_orders = (req, res) => {
-  res.send('manage orders page')
+exports.view_orders = async (req, res) => {
+  try {
+    let date = new Date()
+    date.setDate(date.getDate() - 1)
+
+    const updateStatus = await BorrowHistory.updateMany(
+      { return_date: { $lte: date } },
+      { $set: { status: "Returned" } }
+    )
+
+    BorrowHistory.find({ status: "Returned", book_returned: false })
+      .then(returnedBook => {
+        // console.log("returnedBook", returnedBook)
+        returnedBook.forEach(async book => {
+          // console.log("Book", book)
+          await Book.updateMany(
+            { _id: book.borrowed_book },
+            { $inc: { stock: 1 } }
+          )
+        })
+        return BorrowHistory.updateMany(
+          { status: "Returned", book_returned: false }, 
+          { $set: { book_returned: true } }
+        )
+      })
+      .then(result => {
+        return BorrowHistory.find()
+          .populate({ path: 'borrowed_by', select: 'name' })
+          .populate({ path: 'borrowed_book', select: 'title' })
+          .sort({ created_at: -1 })
+      })
+      .then(borrowHistory => {
+        res.render('admin/orders', { borrowHistory })
+      })
+      .catch(err => console.log(err))
+  } catch(err) {
+    console.log(err)
+  }
 }
 
 exports.view_users = (req, res) => {

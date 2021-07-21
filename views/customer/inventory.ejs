@@ -5,28 +5,35 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
+        <% if (msg.length !== 0) { %>
+          <div class="alert alert-info fw-bold text-center" role="alert">
+            <%= msg %>
+          </div>
+        <% } %>
         <% if(borrowedBook.length === 0) { %>
           <p>No borrowed books yet.</p>
         <% } %>
-        <% borrowedBook.forEach(book => { %>
+        <% borrowedBook.forEach(history => { %>
           <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
             <div class="card">
-              <img src="<%= book.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= book.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.borrowed_book.id %>">
+              <img src="<%= history.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= history.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= history.borrowed_book.id %>">
               <div class="card-body">
-                <h5 class="card-title fs-6" id="book_title" title="<%= book.borrowed_book.title %>"><%= book.borrowed_book.title %></h5>
+                <h5 class="card-title fs-6" id="book_title" title="<%= history.borrowed_book.title %>"><%= history.borrowed_book.title %></h5>
                 <form class="cart d-grid mx-auto mb-0" action="/read" method="POST">
                   <% if (user) { %>
                     <input type="hidden" name="user_id" value="<%= user.id %>">
                   <% } %>
-                  <input type="hidden" name="book_id" value="<%= book.id %>">
+                  <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
+                  <input type="hidden" name="history_id" value="<%= history.id %>">
                   <button class="btn btn-outline-success btn-sm mb-1" type="submit">Read Book</button>
                 </form>
                 <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
                   <% if (user) { %>
                     <input type="hidden" name="user_id" value="<%= user.id %>">
                   <% } %>
-                  <input type="hidden" name="book_id" value="<%= book.id %>">
-                  <button class="btn btn-outline-primary btn-sm" type="submit">Return Book</button>
+                  <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
+                  <input type="hidden" name="history_id" value="<%= history.id %>">
+                  <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return confirm('Are you sure to return this book earlier than the due date?')">Return Book</button>
                 </form>
               </div>
             </div>

@@ -193,8 +193,24 @@ exports.borrowedBooks = async (req, res) => {
   try {
     let date = new Date()
     date.setDate(date.getDate() - 1)  // decrement by 1 day so the borrowed books still appear at the return date.
-    const borrowedBook = await BorrowHistory.find({ borrowed_by: req.params.id ,return_date: { $gte: date } }).populate('borrowed_book')
-    res.render('customer/inventory', { borrowedBook })
+
+    // const updateStatus = await BorrowHistory.updateMany(
+    //   { return_date: { $lte: date } },
+    //   { $set: { status: "Returned" } }
+    // )
+
+    // const returnedBook = await BorrowHistory.find({ status: "Returned" })
+
+    // returnedBook.forEach(async book => {
+    //   // console.log(book.borrowed_book)
+    //   await Book.updateMany(
+    //     { _id: book.borrowed_book },
+    //     { $inc: { stock: 1 } }
+    //   )
+    // })
+
+    const borrowedBook = await BorrowHistory.find({ borrowed_by: req.params.id, status: "In Progress" }).populate('borrowed_book')
+    res.render('customer/inventory', { borrowedBook, msg: req.flash('msg') })
   } catch(err) {
     console.log(err)
   }
@@ -204,6 +220,30 @@ exports.readBook = (req, res) => {
   res.send('read book')
 }
 
-exports.returnBook = (req, res) => {
-  res.send('return book')
+exports.returnBook = async (req, res) => {
+  const { user_id, book_id, history_id } = req.body
+
+  try {
+    await BorrowHistory.updateOne(
+      { _id: history_id },
+      { $set: { status: "Returned", book_returned: true, return_date: new Date() } }
+    )
+
+    await Book.updateMany(
+      { _id: book_id },
+      { $inc: { stock: 1 } }
+    )
+
+    const test = await BorrowHistory.findById(history_id)
+    console.log('user', user_id)
+    console.log('book', book_id)
+    console.log('history', history_id)
+    console.log(test)
+
+    req.flash('msg', "You just returned a book! Thank you and happy reading!")
+    res.redirect(`/inventory/${user_id}`)
+    
+  } catch(err) {
+    console.log(err)
+  }
 }

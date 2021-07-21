@@ -20,6 +20,10 @@ const borrowHistorySchema = new mongoose.Schema({
   status: {
     type: String,
     default: 'In Progress'
+  },
+  book_returned: {
+    type: Boolean,
+    default: false
   }
 },
 {

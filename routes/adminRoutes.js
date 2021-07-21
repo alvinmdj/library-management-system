@@ -17,7 +17,7 @@ router.put('/book', checkUser, bookValidator, adminController.update_book)
 router.delete('/book', adminController.delete_book)
 router.get('/book/:page?', adminController.books)
 
-// Manage Orders
+// View Orders
 router.get('/orders', adminController.view_orders)
 
 // Manage Users
