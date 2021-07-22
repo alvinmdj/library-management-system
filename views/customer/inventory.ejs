@@ -1,48 +1,63 @@
 <link rel="stylesheet" href="../public/css/styles.css">
-
-<div class="display-5 text-center mt-3 mb-3">My Book</div>
-<div class="container mb-4">
-  <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <% if (msg.length !== 0) { %>
-          <div class="alert alert-info fw-bold text-center" role="alert">
-            <%= msg %>
-          </div>
-        <% } %>
-        <% if(borrowedBook.length === 0) { %>
-          <p>No borrowed books yet.</p>
-        <% } %>
-        <% borrowedBook.forEach(history => { %>
-          <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
-            <div class="card">
-              <img src="<%= history.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= history.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= history.borrowed_book.id %>">
-              <div class="card-body">
-                <h5 class="card-title fs-6" id="book_title" title="<%= history.borrowed_book.title %>"><%= history.borrowed_book.title %></h5>
-                <form class="cart d-grid mx-auto mb-0" action="/read" method="POST">
-                  <% if (user) { %>
-                    <input type="hidden" name="user_id" value="<%= user.id %>">
-                  <% } %>
-                  <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
-                  <input type="hidden" name="history_id" value="<%= history.id %>">
-                  <button class="btn btn-outline-success btn-sm mb-1" type="submit">Read Book</button>
-                </form>
-                <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
-                  <% if (user) { %>
-                    <input type="hidden" name="user_id" value="<%= user.id %>">
-                  <% } %>
-                  <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
-                  <input type="hidden" name="history_id" value="<%= history.id %>">
-                  <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return confirm('Are you sure to return this book earlier than the due date?')">Return Book</button>
-                </form>
+<% if (url !== user.id) { %>
+  <div class="display-5 text-center mt-3">Unauthorized Access</div>
+<% } else { %>
+  <div class="display-5 text-center mt-3 mb-4">My Book</div>
+  <div class="container mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <% if (msg.length !== 0) { %>
+            <div class="alert alert-info fw-bold text-center" role="alert">
+              <%= msg %>
+            </div>
+          <% } %>
+          <% if(borrowedBook.length === 0) { %>
+            <p class="text-center mb-0">No borrowed books yet.</p>
+          <% } %>
+          <% borrowedBook.forEach(history => { %>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
+              <div class="card">
+                <img src="<%= history.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= history.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= history.borrowed_book.id %>">
+                <div class="card-body">
+                  <h5 class="card-title fs-6" id="book_title" title="<%= history.borrowed_book.title %>"><%= history.borrowed_book.title %></h5>
+                  <form class="cart d-grid mx-auto mb-0" action="/read" method="POST">
+                    <% if (user) { %>
+                      <input type="hidden" name="user_id" value="<%= user.id %>">
+                    <% } %>
+                    <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
+                    <input type="hidden" name="history_id" value="<%= history.id %>">
+                    <button class="btn btn-outline-success btn-sm mb-1" type="submit">Read Book</button>
+                  </form>
+                  <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
+                    <% if (user) { %>
+                      <input type="hidden" name="user_id" value="<%= user.id %>">
+                    <% } %>
+                    <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
+                    <input type="hidden" name="history_id" value="<%= history.id %>">
+                    <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return confirm('Are you sure to return this book earlier than the due date?')">Return Book</button>
+                  </form>
+                  <%
+                    let date = new Date()
+                    date.setDate(date.getDate() - 1)
+                    const remainingTime = Math.floor((history.return_date - date) / (3600 * 24 * 1000))
+                  %>
+                  <div class="text-center form-text">
+                    <% if (remainingTime === 0) { %>
+                      Last day today!
+                    <% } else { %>
+                      <%= remainingTime %> day(s) remaining
+                    <% } %>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        <% }) %>
+          <% }) %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% } %>
 
 <!-- Book Detail Modal -->
 <% borrowedBook.forEach(book => { %>

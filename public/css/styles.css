@@ -7,6 +7,14 @@
   max-height: 650px;
 }
 
+.slick-track {
+  margin: 0 27px;
+}
+
+.slick-prev:before, .slick-next:before{
+  color:rgb(85, 85, 85);
+}
+
 #book_title {
   overflow: hidden;
   text-overflow: ellipsis;

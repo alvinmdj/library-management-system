@@ -25,5 +25,6 @@ router.post('/borrow', requireAuth, borrowValidator, indexController.postBorrow)
 router.get('/inventory/:id', requireAuth, indexController.borrowedBooks)
 router.post('/read', requireAuth, indexController.readBook)
 router.post('/return', requireAuth, indexController.returnBook)
+router.get('/history/:id', requireAuth, indexController.borrowHistory)
 
 module.exports = router

@@ -217,11 +217,15 @@ exports.borrowedBooks = async (req, res) => {
         }).populate('borrowed_book')
       })
       .then(borrowedBook => {
-        res.render('customer/inventory', { borrowedBook, msg: req.flash('msg') })
+        res.render('customer/inventory', { url: req.params.id, borrowedBook, msg: req.flash('msg') })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/')
+      })
   } catch(err) {
     console.log(err)
+    res.redirect('/')
   }
 }
 
@@ -247,5 +251,19 @@ exports.returnBook = async (req, res) => {
     res.redirect(`/inventory/${user_id}`)
   } catch(err) {
     console.log(err)
+    res.redirect('/')
+  }
+}
+
+exports.borrowHistory = async (req, res) => {
+  try {
+    const borrowHistory = await BorrowHistory.find({ borrowed_by: req.params.id })
+      .populate('borrowed_book')
+      .sort({ borrow_date: -1 })
+
+    res.render('customer/borrow-history', { url: req.params.id, borrowHistory })
+  } catch(err) {
+    console.log(err)
+    res.redirect('/')
   }
 }
