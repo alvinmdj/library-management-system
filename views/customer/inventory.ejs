@@ -4,57 +4,46 @@
 <% } else { %>
   <div class="display-5 text-center mt-3 mb-4">My Book</div>
   <div class="container mb-4">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <% if (msg.length !== 0) { %>
-            <div class="alert alert-info fw-bold text-center" role="alert">
-              <%= msg %>
-            </div>
-          <% } %>
-          <% if(borrowedBook.length === 0) { %>
-            <p class="text-center mb-0">No borrowed books yet.</p>
-          <% } %>
-          <% borrowedBook.forEach(history => { %>
-            <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2 d-flex mx-auto" style="width: 12rem;">
-              <div class="card">
-                <img src="<%= history.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= history.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= history.borrowed_book.id %>">
-                <div class="card-body">
-                  <h5 class="card-title fs-6" id="book_title" title="<%= history.borrowed_book.title %>"><%= history.borrowed_book.title %></h5>
-                  <form class="cart d-grid mx-auto mb-0" action="/read" method="POST">
-                    <% if (user) { %>
-                      <input type="hidden" name="user_id" value="<%= user.id %>">
-                    <% } %>
-                    <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
-                    <input type="hidden" name="history_id" value="<%= history.id %>">
-                    <button class="btn btn-outline-success btn-sm mb-1" type="submit">Read Book</button>
-                  </form>
-                  <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
-                    <% if (user) { %>
-                      <input type="hidden" name="user_id" value="<%= user.id %>">
-                    <% } %>
-                    <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
-                    <input type="hidden" name="history_id" value="<%= history.id %>">
-                    <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return confirm('Are you sure to return this book earlier than the due date?')">Return Book</button>
-                  </form>
-                  <%
-                    let date = new Date()
-                    date.setDate(date.getDate() - 1)
-                    const remainingTime = Math.floor((history.return_date - date) / (3600 * 24 * 1000))
-                  %>
-                  <div class="text-center form-text">
-                    <% if (remainingTime === 0) { %>
-                      Last day today!
-                    <% } else { %>
-                      <%= remainingTime %> day(s) remaining
-                    <% } %>
-                  </div>
-                </div>
+    <div class="row d-flex justify-content-center">
+      <% if (msg.length !== 0) { %>
+        <div class="alert alert-info fw-bold text-center" role="alert">
+          <%= msg %>
+        </div>
+      <% } %>
+      <% if(borrowedBook.length === 0) { %>
+        <p class="text-center mb-0">No borrowed books yet.</p>
+      <% } %>
+      <% borrowedBook.forEach(history => { %>
+        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2" style="width: 12rem;">
+          <div class="card">
+            <img src="<%= history.borrowed_book.coverImagePath %>" id="img-pointer" class="card-img-top" alt="<%= history.borrowed_book.title %>" width="150" height="200" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= history.borrowed_book.id %>">
+            <div class="card-body">
+              <h5 class="card-title fs-6" id="book_title" title="<%= history.borrowed_book.title %>"><%= history.borrowed_book.title %></h5>
+              <form class="cart d-grid mx-auto mb-0" action="/return" method="POST">
+                <% if (user) { %>
+                  <input type="hidden" name="user_id" value="<%= user.id %>">
+                <% } %>
+                <input type="hidden" name="book_id" value="<%= history.borrowed_book.id %>">
+                <input type="hidden" name="history_id" value="<%= history.id %>">
+                <button class="btn btn-outline-success btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#readBookModal<%= history.borrowed_book.id %>">Read Book</button>
+                <button class="btn btn-outline-primary btn-sm" type="submit" onclick="return confirm('Are you sure to return this book earlier than the due date?')">Return Book</button>
+              </form>
+              <%
+                let date = new Date()
+                date.setDate(date.getDate() - 1)
+                const remainingTime = Math.floor((history.return_date - date) / (3600 * 24 * 1000))
+              %>
+              <div class="text-center form-text">
+                <% if (remainingTime === 0) { %>
+                  Last day today!
+                <% } else { %>
+                  <%= remainingTime %> day(s) remaining
+                <% } %>
               </div>
             </div>
-          <% }) %>
+          </div>
         </div>
-      </div>
+      <% }) %>
     </div>
   </div>
 <% } %>
@@ -85,6 +74,30 @@
                             <li class="list-group-item"><strong>Description : </strong> <br> <%= book.borrowed_book.description %></li>
                         </ul>
                     </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<% }) %>
+
+<!-- Read Book Modal -->
+<% borrowedBook.forEach(book => { %>
+  <div class="modal fade" id="readBookModal<%= book.borrowed_book.id %>" tabindex="-1" aria-labelledby="readBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="readBookModalLabel"><%= book.borrowed_book.title %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse dolor nobis incidunt impedit dolore repellat modi magnam numquam! Quibusdam temporibus, numquam totam ullam quam saepe quos sed. Recusandae earum maiores architecto eligendi blanditiis repellat soluta! Sit ex et consequatur nisi culpa ad, odit beatae expedita deleniti aliquam, a ullam doloremque alias. Sunt numquam dolore exercitationem veniam vel accusantium beatae aperiam distinctio voluptas, animi deserunt quasi ex quidem, voluptatibus at eaque molestiae iure impedit dolorum, sint mollitia eos maxime est! Deserunt delectus vitae soluta, eum nemo hic odio eos eveniet, doloremque modi illo aspernatur tenetur? Obcaecati numquam, fugiat reprehenderit quibusdam esse non recusandae porro pariatur dicta et voluptates omnis quae repellendus, dignissimos ut amet, quia quisquam tempora? Velit consequuntur, quod minus nulla maxime dolores. Nisi suscipit ratione eius sunt distinctio. Omnis soluta illum incidunt voluptatum quae aspernatur blanditiis quis, perspiciatis consectetur autem explicabo nulla, ducimus mollitia deserunt cupiditate odio laboriosam eaque et maiores totam. Maxime atque quibusdam aspernatur eos tempora odio fugiat ullam dignissimos, fugit quo, officia et! Consequuntur corrupti, nulla magnam, dolore veniam repellat, fugiat molestiae quo atque rerum officia fuga? Sit nemo nostrum, molestiae perspiciatis eum sint esse ipsum neque nam pariatur, voluptates repellat atque ullam ad eligendi ducimus id officiis. Fuga accusantium dolorum exercitationem mollitia repellendus, officia obcaecati repellat, dolores aut amet consequuntur voluptates provident fugit consectetur nisi eos expedita ullam facilis iste animi veniam quam perspiciatis? Modi consectetur est dignissimos maxime doloremque molestiae, quasi laudantium libero esse asperiores quae commodi voluptatibus quos animi eius distinctio harum tenetur ut repellendus nam doloribus fugit consequatur autem possimus. Quasi error, debitis hic cupiditate non expedita libero dolore aperiam corrupti ipsum dicta odit dolores, amet minima velit, placeat quos quam ipsam vel quidem numquam voluptatum quas incidunt. Quo molestiae assumenda ducimus quasi quam, porro eaque ipsam dolore officia impedit iste molestias aliquam sapiente, vitae doloremque fugit adipisci quod atque cum hic. Ipsam qui itaque possimus aut provident? Hic, aperiam? Architecto dolor expedita earum ullam quis illo laborum maxime distinctio magni? Nihil quo obcaecati voluptate odio magni rem corporis voluptates beatae facilis ipsum voluptas tempore laboriosam recusandae voluptatibus mollitia eaque at accusantium eveniet animi harum veniam, quia atque! Eaque corporis tempore minima quam, iste illo mollitia officia voluptatum, dignissimos minus voluptatibus reprehenderit esse natus magni, odit in. Ex corrupti dicta debitis odit dolores est alias provident saepe dolorem voluptates a aut, tempora, nostrum, maxime accusantium officiis unde natus beatae exercitationem. Saepe laborum placeat laudantium sed ad quia explicabo quaerat natus dolor, culpa dolores error animi dolorem quasi velit facilis nihil architecto perspiciatis amet inventore vero ea perferendis fugiat soluta. Expedita, sunt? Earum sequi hic et nihil molestiae rerum nulla, inventore placeat minima voluptas sint! Neque assumenda deserunt excepturi possimus impedit, dolorum repellat similique perspiciatis eos asperiores quam. Libero voluptatem cum sint labore. Iste hic, quos laborum et autem enim impedit repellendus officiis distinctio velit inventore ullam praesentium minus, optio est laboriosam illum voluptatum tempore. Dolor, aperiam temporibus culpa commodi amet ipsa suscipit fugit quae eveniet. Voluptatum eos repudiandae amet dolorem tenetur, in corporis animi nostrum nisi nihil, dicta iure nobis aut architecto odit, pariatur molestiae fuga. Delectus cupiditate culpa obcaecati earum sapiente? Facilis eaque qui aspernatur! Alias, amet? Impedit esse similique nesciunt doloribus eligendi mollitia voluptatem fuga perspiciatis vero quam harum, totam quisquam a eius deserunt! Illo autem rem recusandae? Expedita ut aut maxime architecto sit vitae dicta excepturi necessitatibus cumque. Natus eum, facilis quibusdam error maiores quasi. Blanditiis totam minima consectetur nobis dignissimos autem, sequi et cumque deserunt. Earum in reprehenderit sint delectus recusandae, nihil placeat sequi libero nulla, at ullam porro magnam amet vero ex neque eveniet fuga? Magni consequatur eligendi magnam dolor culpa, impedit labore totam? Dolore doloremque distinctio voluptatem explicabo quam dicta nam, commodi, pariatur tenetur repellat expedita! Voluptas eaque, inventore in unde nisi eum. Recusandae cupiditate pariatur iure, eum quam non voluptas asperiores perferendis. Accusamus odit vitae assumenda, eveniet neque non enim eos provident asperiores numquam voluptatum, architecto earum soluta eligendi exercitationem alias, dolor nisi laudantium corrupti. Odit atque cum impedit consequuntur porro a eos obcaecati recusandae aspernatur vel laudantium aperiam labore fuga, nesciunt minus accusamus rem fugit laborum voluptas repellat itaque magni? Dolore corporis unde illo temporibus doloremque beatae sit, harum fugiat et maxime laudantium recusandae? Sequi eaque dolore minus quisquam earum tempora optio ab cum rerum ratione totam minima culpa sint molestiae similique, debitis vel repudiandae inventore in recusandae ipsam voluptatibus error veniam. Itaque quis nostrum maxime, necessitatibus sint delectus iste facilis incidunt blanditiis dolorem ullam id provident animi. Corrupti architecto nostrum natus blanditiis quis ducimus libero maiores molestias dolor tempora necessitatibus tenetur doloribus, laboriosam quisquam consectetur cumque! Cupiditate ipsa dolores id quisquam accusantium sunt quasi, unde sed eos quae quas blanditiis, quos ex molestiae a, odit quidem tempora deserunt? Commodi a placeat expedita animi ullam rerum, consequatur quisquam deleniti dignissimos in iure nihil iusto, excepturi soluta magnam ea ad corrupti necessitatibus ipsum? Esse omnis quibusdam, nihil ipsam voluptatibus at. Hic atque deserunt mollitia dolorum voluptate sint, fugiat odit ducimus maiores dolore perspiciatis rerum placeat consequuntur quod nobis libero minus doloribus cupiditate architecto laborum recusandae. Saepe excepturi tempora voluptatibus odio praesentium corrupti incidunt, rerum mollitia doloribus, magnam similique quis consequatur veritatis. Doloribus, autem! Suscipit nihil modi molestiae ea reiciendis illum eaque sequi quod laborum quas tenetur repudiandae veniam placeat dolore odit, neque temporibus eum. Eum deleniti quo ullam quia maiores voluptatem perferendis, possimus corrupti nulla laborum quidem esse ipsum explicabo ab voluptatibus nobis velit doloribus, repudiandae blanditiis quae, dolorum illum sequi nesciunt ut. Laborum quas ipsum error quaerat? Assumenda quo voluptatem magni, repellendus iusto vitae, impedit exercitationem eveniet inventore ratione est, pariatur non ad nisi? Ipsam obcaecati quidem placeat atque, quia possimus asperiores saepe numquam a perspiciatis blanditiis pariatur repellat temporibus eligendi accusamus suscipit, optio ea! Repellendus pariatur distinctio veniam architecto rerum voluptas at a ea repellat similique ut, doloremque consectetur nam rem quia maxime quas voluptatibus! Itaque aspernatur beatae reprehenderit molestiae voluptatibus animi, perspiciatis enim. Non dolorem sint exercitationem, totam saepe ipsa aut excepturi maiores rem alias libero minus assumenda, ipsam recusandae quisquam sapiente?</p>
                 </div>
               </div>
             </div>

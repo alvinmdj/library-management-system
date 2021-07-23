@@ -8,6 +8,7 @@ const router = express.Router()
 // Books
 router.get('/', indexController.home)
 router.get('/books/:page?', indexController.allBooks)
+router.get('/search', indexController.searchBook)
 
 // User Profile
 router.get('/profile', requireAuth, indexController.userProfile)

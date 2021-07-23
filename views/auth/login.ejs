@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-3">
       <h2>Login</h2>
-      <form>
+      <form id="login_form">
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
           <input type="email" class="form-control" id="email" name="email" required>
@@ -21,7 +21,7 @@
 </div>
 
 <script>
-  const form = document.querySelector('form')
+  const form = document.querySelector('#login_form')
   const emailError = document.querySelector('.email.error')
   const passwordError = document.querySelector('.password.error')
 

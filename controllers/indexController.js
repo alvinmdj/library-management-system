@@ -59,6 +59,19 @@ exports.allBooks = (req, res) => {
     })
 }
 
+exports.searchBook = (req, res) => {
+  Book.find({ title: { $regex: req.query.title || '', $options: 'i' } })
+    .sort({ title: 1 })
+    .then(books => {
+      // console.log(books)
+      res.render('customer/search-book', { books, msg: req.flash('msg') })
+    })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/admin')
+    })
+}
+
 exports.userProfile = (req, res) => {
   res.render('customer/profile', { msg: req.flash('msg') })
 }

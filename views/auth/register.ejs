@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-3">
       <h2>Register</h2>
-      <form method="POST">
+      <form method="POST" id="register_form">
         <div class="mb-3">
           <label for="name" class="form-label">Full Name</label>
           <input type="text" class="form-control" id="name" name="name" required>
@@ -31,7 +31,7 @@
 </div>
 
 <script>
-  const form = document.querySelector('form')
+  const form = document.querySelector('#register_form')
   const nameError = document.querySelector('.name.error')
   const emailError = document.querySelector('.email.error')
   const passwordError = document.querySelector('.password.error')
