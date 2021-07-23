@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="public/css/styles.css">
 
 <!-- Carousel -->
-<div id="carouselCaptions" class="carousel slide mb-4" data-bs-ride="carousel">
+<div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -49,6 +49,16 @@
           <%= msg %>
         </div>
       <% } %>
+
+      <form action="" method="GET" class="col-md-6 mx-auto my-4">
+        <div class="input-group rounded">
+          <input type="search" class="form-control rounded" placeholder="Search book..." />
+          <button type="submit" class="input-group-text border-0" id="search-addon">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
       <div class="card mb-3">
         <div class="card-body">
           <h2 class="display-6 fw-normal text-center mb-3">Popular Books</h2>

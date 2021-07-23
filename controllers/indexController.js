@@ -13,8 +13,8 @@ const removeImage = (filePath) => {
       if(err) throw err
     })
   } catch(err) {
-    res.redirect('/profile')
     console.log(err)
+    res.redirect('/profile')
   }
 }
 
@@ -23,15 +23,40 @@ exports.home = (req, res) => {
     .then(books => {
       res.render('index', { books, msg: req.flash('msg') })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      res.redirect('/')
+    })
 }
 
 exports.allBooks = (req, res) => {
-  Book.find().sort({ title: 1 })
-    .then(books => {
-      res.render('customer/books', { books, msg: req.flash('msg') })
+  let currentPage = req.params.page || 1
+  let perPage = req.query.perPage || 12
+  let totalBook
+
+  Book.find()
+    .countDocuments()
+    .then(count => {
+      totalBook = count
+      return Book.find()
+        .skip(parseInt(currentPage - 1) * parseInt(perPage))
+        .limit(parseInt(perPage))
+        .sort({ title: 1 })
     })
-    .catch(err => console.log(err))
+    .then(books => {
+      res.render('customer/books', {
+        books,
+        msg: req.flash('msg'),
+        currentPage: parseInt(currentPage),
+        perPage: parseInt(perPage),
+        totalBook: parseInt(totalBook),
+        totalPage: Math.ceil(parseInt(totalBook) / parseInt(perPage)),
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/')
+    })
 }
 
 exports.userProfile = (req, res) => {
@@ -55,6 +80,7 @@ exports.updateProfile = async (req, res) => {
       })
     } catch(err) {
       console.log(err)
+      res.redirect('/')
     }
   } else {
     let profile_picture
@@ -65,7 +91,10 @@ exports.updateProfile = async (req, res) => {
             removeImage(user.profilePicturePath)
           }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          res.redirect('/')
+        })
       profile_picture = req.files.profile_picture[0].filename
     } else {
       try {
@@ -73,6 +102,7 @@ exports.updateProfile = async (req, res) => {
         profile_picture = user.profile_picture
       } catch (err) {
         console.log(err)
+        res.redirect('/')
       }
     }
     User.updateOne(
@@ -83,7 +113,10 @@ exports.updateProfile = async (req, res) => {
         req.flash('msg', `Profile has been updated!`)
         res.redirect(`/profile`)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/')
+      })
   }
 }
 
@@ -92,7 +125,10 @@ exports.cart = (req, res) => {
     .then(result => {
       res.render('customer/cart', { cartItems: result, msg: req.flash('msg') })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      res.redirect('/')
+    })
 }
 
 exports.postToCart = async (req, res) => {
@@ -118,12 +154,19 @@ exports.postToCart = async (req, res) => {
             req.flash('msg', 'Book has been added to your cart!'),
             res.redirect(prev_url)
           })
-          .catch(err => console.log(err))
+          .catch(err => {
+            console.log(err)
+            res.redirect('/')
+          })
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/')
+      })
   } catch(err) {
     console.log(err)
+    res.redirect('/')
   }
 }
 
@@ -136,6 +179,7 @@ exports.deleteCartItem = async (req, res) => {
     res.redirect('/cart')
   } catch(err) {
     console.log(err)
+    res.redirect('/')
   }
 }
 
@@ -144,7 +188,10 @@ exports.getBorrow = (req, res) => {
     .then(result => {
       res.render('customer/borrow', { cartItems: result })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(err)
+      res.redirect('/')
+    })
 }
 
 exports.postBorrow = async (req, res) => {
@@ -154,7 +201,7 @@ exports.postBorrow = async (req, res) => {
     try {
       const user = await User.findById(user_id)
       const cart = await Cart.find().populate('user').populate('book')
-      console.log(cart)
+      // console.log(cart)
       res.render('customer/borrow', {
         errors: errors.array(),
         user,
@@ -162,6 +209,7 @@ exports.postBorrow = async (req, res) => {
       })
     } catch(err) {
       console.log(err)
+      res.redirect('/')
     }
   } else {
     try {
@@ -183,6 +231,7 @@ exports.postBorrow = async (req, res) => {
       })
     } catch(err) {
       console.log(err)
+      res.redirect('/')
     }
   }
 }

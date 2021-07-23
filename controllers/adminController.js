@@ -28,8 +28,8 @@ const removeImage = (filePath) => {
       if(err) throw err
     })
   } catch(err) {
-    res.redirect('/admin')
     console.log(err)
+    res.redirect('/admin')
   }
 }
 
@@ -69,6 +69,10 @@ exports.books = (req, res) => {
         msg: req.flash('msg')
       })
     })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/admin')
+    })
 }
 
 exports.add_book_view = (req, res) => {
@@ -98,7 +102,10 @@ exports.add_book = (req, res) => {
         req.flash('msg', 'New book has been added!')
         res.redirect('/admin/book')
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/admin')
+      })
   }
 }
 
@@ -108,6 +115,7 @@ exports.detail_book = async (req, res) => {
     res.render('admin/book-detail', { book, msg: req.flash('msg') })
   } catch (err) {
     console.log(err)
+    res.redirect('/admin')
   }
 }
 
@@ -117,6 +125,7 @@ exports.update_book_view = async (req, res) => {
     res.render('admin/book-update', { book, genres })
   } catch(err) {
     console.log(err)
+    res.redirect('/admin')
   }
 }
 
@@ -134,6 +143,7 @@ exports.update_book = async (req, res) => {
       })
     } catch(err) {
       console.log(err)
+      res.redirect('/admin')
     }
   } else {
     let cover_image
@@ -142,7 +152,10 @@ exports.update_book = async (req, res) => {
         .then(book => {
           removeImage(book.coverImagePath)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          res.redirect('/admin')
+        })
       cover_image = req.files.cover_image[0].filename
     } else {
       try {
@@ -150,6 +163,7 @@ exports.update_book = async (req, res) => {
         cover_image = book.cover_image
       } catch (err) {
         console.log(err)
+        res.redirect('/admin')
       }
     }
     Book.updateOne(
@@ -162,7 +176,10 @@ exports.update_book = async (req, res) => {
         req.flash('msg', `Book has been updated!`)
         res.redirect(`/admin/book/detail/${req.body.id}`)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/admin')
+      })
   }
 }
 
@@ -176,6 +193,7 @@ exports.delete_book = async (req, res) => {
     res.redirect(`/admin/book`)
   } catch(err) {
     console.log(err)
+    res.redirect('/admin')
   }
 }
 
@@ -213,9 +231,13 @@ exports.view_orders = async (req, res) => {
       .then(borrowHistory => {
         res.render('admin/orders', { borrowHistory })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        res.redirect('/admin')
+      })
   } catch(err) {
     console.log(err)
+    res.redirect('/admin')
   }
 }
 
