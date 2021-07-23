@@ -27,10 +27,6 @@
   cursor: pointer;
 }
 
-.cart {
-  max-width: 95%;
-}
-
 @media screen and (max-width: 768px) {
   .cart {
     max-width: 100%;

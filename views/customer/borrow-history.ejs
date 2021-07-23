@@ -13,12 +13,17 @@
           <% for( let i = 0; i < borrowHistory.length; i++ ) { %>
             <div class="bg-light card mb-3">
               <div class="card-body">
-                <% while(borrowHistory[i].borrow_date.getTime() === borrowHistory[i+1].borrow_date.getTime()) { %>
-                  <p>Borrow Date: <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(borrowHistory[i].borrow_date) %></p>
-                  <img src="<%= borrowHistory[i].borrowed_book.coverImagePath %>" alt="<%= borrowHistory[i].borrowed_book.title %>" width="50" height="70">
-                  <span><%= borrowHistory[i].borrowed_book.title %></span>
-                  <span class="form-text">- (Return Date: <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(borrowHistory[i].return_date) %>)</span>
-                <% } %>
+                <p>Borrow Date: <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(borrowHistory[i].borrow_date) %></p>
+                <div class="row">
+                  <div class="col-md-1">
+                    <img src="<%= borrowHistory[i].borrowed_book.coverImagePath %>" alt="<%= borrowHistory[i].borrowed_book.title %>" width="50" height="70">
+                  </div>
+                  <div class="col-md-11">
+                    <div><%= borrowHistory[i].borrowed_book.title %></div>
+                    <div class="form-text">(Return Date: <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(borrowHistory[i].return_date) %>)</div>
+                    <div class="form-text">Borrow Status: <%= borrowHistory[i].status %></div>
+                  </div>
+                </div>
               </div>
             </div>
           <% } %>
