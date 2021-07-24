@@ -35,15 +35,22 @@ const removeImage = (filePath) => {
   }
 }
 
-exports.home = (req, res) => {
-  Book.find().sort({ created_at: -1 }).limit(12)
-    .then(books => {
-      res.render('index', { books, msg: req.flash('msg') })
-    })
-    .catch(err => {
-      console.log(err)
-      res.redirect('/')
-    })
+exports.home = async (req, res) => {
+  try {
+    // for popular books
+    const sortBorrowedBooksByCount = await BorrowHistory.aggregate([
+      { $sortByCount: "$borrowed_book" }
+    ]).limit(10)
+    const popularBooks = await Book.populate(sortBorrowedBooksByCount, { path: '_id' })
+
+    // for recently added books
+    const recentBooks = await Book.find().sort({ created_at: -1 }).limit(12)
+
+    res.render('index', { popularBooks, recentBooks, msg: req.flash('msg') })
+  } catch(err) {
+    console.log(err)
+    res.redirect('/')
+  }
 }
 
 exports.allBooks = (req, res) => {
