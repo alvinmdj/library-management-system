@@ -22,12 +22,12 @@
                   <% } %>
                   <input type="hidden" name="book_id" value="<%= book.id %>">
                   <input type="hidden" name="prev_url" value="/books">
-                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
-                  <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
+                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
+                  <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Cart</button>
                 </form>
               <% } else { %>
                 <div class="d-grid text-center">
-                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                  <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
                   <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
                 </div>
               <% } %>

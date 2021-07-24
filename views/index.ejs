@@ -56,6 +56,36 @@
           <% if (typeof popularBooks !== 'undefined') { %>
             
           <% } else { %>
+            <div class="row slider mx-4">
+              <% books.forEach(book => { %>
+              <div class="col-md-12 border border-2 rounded d-flex justify-content-center">
+                <div class="m-2 d-block">
+                  <div class="img-thumbnail d-flex justify-content-center mb-2 cover-img">
+                    <img src="<%= book.coverImagePath %>" alt="<%= book.title %>" style="width: inherit">
+                  </div>
+                  <div>
+                    <h5 class="card-title fs-6 mb-3" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
+                    <% if (book.stock !== 0) { %>
+                      <form class="cart d-grid mx-3" action="/cart" method="POST">
+                        <% if (user) { %>
+                          <input type="hidden" name="user_id" value="<%= user.id %>">
+                        <% } %>
+                        <input type="hidden" name="book_id" value="<%= book.id %>">
+                        <input type="hidden" name="prev_url" value="/">
+                        <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
+                        <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Cart</button>
+                      </form>
+                    <% } else { %>
+                      <div class="d-grid text-center mx-3">
+                        <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
+                        <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+            </div>
             <p class="text-center">Looks like there is nothing popular...</p>
           <% } %>
         </div>
@@ -78,12 +108,12 @@
                           <% } %>
                           <input type="hidden" name="book_id" value="<%= book.id %>">
                           <input type="hidden" name="prev_url" value="/">
-                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
-                          <button class="btn btn-outline-primary btn-sm" type="submit">Add to Cart</button>
+                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
+                          <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Cart</button>
                         </form>
                       <% } else { %>
                         <div class="d-grid text-center">
-                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>">Details</button>
+                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
                           <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
                         </div>
                       <% } %>

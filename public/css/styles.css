@@ -7,8 +7,8 @@
   max-height: 650px;
 }
 
-.slick-track {
-  margin: 0 27px;
+.slick-slide {
+  margin: 0 15px;
 }
 
 .slick-prev:before, .slick-next:before{
