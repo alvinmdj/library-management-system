@@ -28,4 +28,7 @@ router.post('/read', requireAuth, indexController.readBook)
 router.post('/return', requireAuth, indexController.returnBook)
 router.get('/history/:id', requireAuth, indexController.borrowHistory)
 
+// Books by genre - Placed at the bottom to avoid interference with other routes
+router.get('/:genre', indexController.booksByGenre)
+
 module.exports = router

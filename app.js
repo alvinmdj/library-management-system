@@ -16,6 +16,7 @@ const indexRoutes = require('./routes/indexRoutes')
 const authRoutes = require('./routes/authRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const { adminArea, checkUser } = require('./middlewares/authMiddleware')
+const { genreList } = require('./middlewares/userMiddleware')
 
 const app = express()
 
@@ -68,10 +69,11 @@ app.use(multer({ storage, fileFilter })
     }
   ]))
 
+app.get('*', genreList)
 app.get('*', checkUser)
-app.use('/', indexRoutes)
-app.use('/', authRoutes)
 app.use('/admin', adminArea, adminRoutes)
+app.use('/', authRoutes)
+app.use('/', indexRoutes) // placed on the bottom of other routes so '/:genre' doesn't interfere with other routes
 
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true, 

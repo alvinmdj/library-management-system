@@ -27,7 +27,29 @@ const borrowValidator = [
   })
 ]
 
+const genreList = (req, res, next) => {
+  const genres = [
+    'Art', 
+    'Science Fiction', 
+    'Fantasy',
+    'Finance',
+    'Biographies', 
+    'Recipes', 
+    'Romance', 
+    'Children',
+    'History',
+    'Medicine',
+    'Religion',
+    'Mystery',
+    'Music',
+    'Science'
+  ]
+  res.locals.genres = genres
+  next()
+}
+
 module.exports = {
   editProfileValidator,
-  borrowValidator
+  borrowValidator,
+  genreList
 }

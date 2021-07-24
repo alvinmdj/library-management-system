@@ -6,6 +6,23 @@ const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
 
+const genres = [
+  'Art', 
+  'Science Fiction', 
+  'Fantasy',
+  'Finance',
+  'Biographies', 
+  'Recipes', 
+  'Romance', 
+  'Children',
+  'History',
+  'Medicine',
+  'Religion',
+  'Mystery',
+  'Music',
+  'Science'
+]
+
 const removeImage = (filePath) => {
   try {
     filePath = path.join(__dirname, '../', filePath)
@@ -70,6 +87,23 @@ exports.searchBook = (req, res) => {
       console.log(err)
       res.redirect('/admin')
     })
+}
+
+exports.booksByGenre = async  (req, res) => {
+  try {
+    const { genre } = req.params
+    const genreId = genre.split('genre-').pop()
+    if(genreId > genres.length || genreId < 1) {  // if user change the params from the url
+      res.redirect('/')
+    } else {
+      const genreName = genres[genreId - 1]
+      const books = await Book.find({ genre: genreName })
+      res.render('customer/books-genre', { books, genreName, genreParam: genre, msg: req.flash('msg') })
+    }
+  } catch(err) {
+    console.log(err)
+    res.redirect('/')
+  }
 }
 
 exports.userProfile = (req, res) => {
