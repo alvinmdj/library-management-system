@@ -1,0 +1,42 @@
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <%- include('../partials/admin-sidebar') %>
+    <div class="col py-3">
+      <div class="col overflow-auto h-100">
+        <div class="bg-light border rounded-3 p-3">
+          <h2 class="display-4">View Users</h2>
+          <div class="table-responsive-md">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Profile Picture</th>
+                  <th scope="col">Full Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Registration Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (users.length > 0) { %>
+                  <% users.forEach((user, i) => { %>
+                    <tr>
+                      <th scope="row"><%= ++i %></th>
+                      <td><img src="<%= user.profilePicturePath %>" alt="<%= user.name %>" class="img-thumbnail rounded-circle" width="75"></td>
+                      <td><%= user.name %></td>
+                      <td><%= user.email %></td>
+                      <td><%= new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: 'long', day: '2-digit'}).format(user.created_at) %></td>
+                    </tr>
+                  <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5" class="text-center">No body has registered yet...</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

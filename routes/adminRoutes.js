@@ -20,7 +20,7 @@ router.get('/book/:page?', adminController.books)
 // View Orders
 router.get('/orders', adminController.view_orders)
 
-// Manage Users
+// View Users
 router.get('/users', adminController.view_users)
 
 module.exports = router

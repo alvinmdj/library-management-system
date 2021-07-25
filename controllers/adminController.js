@@ -1,5 +1,6 @@
 const Book = require('../models/Book')
 const BorrowHistory = require('../models/BorrowHistory')
+const User = require('../models/User')
 const { validationResult } = require('express-validator')
 const path = require('path')
 const fs = require('fs')
@@ -241,6 +242,12 @@ exports.view_orders = async (req, res) => {
   }
 }
 
-exports.view_users = (req, res) => {
-  res.send('manage users page')
+exports.view_users = async (req, res) => {
+  try {
+    const users = await User.find()
+    res.render('admin/view-users', { users })
+  } catch(err) {
+    console.log(err)
+    res.redirect('/admin')
+  }
 }
