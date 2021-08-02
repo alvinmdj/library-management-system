@@ -50,20 +50,17 @@
         </div>
       <% } %>
 
+      <!-- Popular Books -->
       <div class="card mb-3">
         <div class="card-body">
           <h2 class="display-6 fw-normal text-center mb-3">Popular Books</h2>
           <% if (typeof popularBooks !== 'undefined') { %>
             <div class="row slider mx-4">
               <% popularBooks.forEach(book => { %>
-              <div class="col-md-12 border border-2 rounded d-flex justify-content-center">
-                <div class="m-2 d-block">
-                  <div class="img-thumbnail d-flex justify-content-center mb-2 cover-img">
-                    <img src="<%= book._id.coverImagePath %>" alt="<%= book._id.title %>" style="width: inherit">
-                  </div>
-                  <div>
-                    <h5 class="card-title fs-6" id="book_title" title="<%= book._id.title %>"><%= book._id.title %></h5>
-                    <p class="form-text">Borrowed <%= book.count %> time(s)</p>
+                <div class="card">
+                  <img src="<%= book._id.coverImagePath %>" alt="<%= book._id.title %>" id="img-pointer" class="card-img mt-2" data-bs-toggle="modal" data-bs-target="#popularBookDetailModal<%= book._id.id %>">
+                  <div class="card-body p-2">
+                    <p class="card-title mx-3 fw-bold" id="book_title" title="<%= book._id.title %>"><%= book._id.title %></p>
                     <% if (book._id.stock !== 0) { %>
                       <form class="cart d-grid mx-3" action="/cart" method="POST">
                         <% if (user) { %>
@@ -71,18 +68,18 @@
                         <% } %>
                         <input type="hidden" name="book_id" value="<%= book._id.id %>">
                         <input type="hidden" name="prev_url" value="/">
-                        <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book._id.id %>"><i class="bi bi-info-circle"></i> Details</button>
-                        <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Cart</button>
+                        <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Add to Cart</button>
                       </form>
                     <% } else { %>
                       <div class="d-grid text-center mx-3">
-                        <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book._id.id %>"><i class="bi bi-info-circle"></i> Details</button>
                         <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
                       </div>
                     <% } %>
                   </div>
+                  <div class="card-footer">
+                    <small class="text-muted">Borrowed <%= book.count %> time(s)</small>
+                  </div>
                 </div>
-              </div>
               <% }) %>
             </div>
           <% } else { %>
@@ -90,6 +87,8 @@
           <% } %>
         </div>
       </div>
+
+      <!-- Recently Added Books -->
       <div class="card m-0">
         <div class="card-body">
           <h2 class="display-6 fw-normal text-center mb-3">Recently Added Books</h2>
@@ -98,7 +97,7 @@
               <% recentBooks.forEach(book => { %>
                 <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2" style="width: 12rem;">
                   <div class="card">
-                    <img src="<%= book.coverImagePath %>" class="card-img-top" alt="<%= book.title %>" width="150" height="200">
+                    <img src="<%= book.coverImagePath %>" id="img-pointer" class="card-img mt-2" alt="<%= book.title %>" data-bs-toggle="modal" data-bs-target="#recentBookDetailModal<%= book.id %>">
                     <div class="card-body">
                       <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
                       <% if (book.stock !== 0) { %>
@@ -108,12 +107,10 @@
                           <% } %>
                           <input type="hidden" name="book_id" value="<%= book.id %>">
                           <input type="hidden" name="prev_url" value="/">
-                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
-                          <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Cart</button>
+                          <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Add to Cart</button>
                         </form>
                       <% } else { %>
                         <div class="d-grid text-center">
-                          <button class="btn btn-outline-info btn-sm mb-1" type="button" data-bs-toggle="modal" data-bs-target="#bookDetailModal<%= book.id %>"><i class="bi bi-info-circle"></i> Details</button>
                           <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
                         </div>
                       <% } %>
@@ -131,9 +128,9 @@
   </div>
 </div>
 
-<!-- Book Detail Modal -->
+<!-- Recently Added Book Detail Modal -->
 <% recentBooks.forEach(book => { %>
-  <div class="modal fade" id="bookDetailModal<%= book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+  <div class="modal fade" id="recentBookDetailModal<%= book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,7 +141,7 @@
               <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <img src="<%= book.coverImagePath %>" class="img-fluid">
+                        <img src="<%= book.coverImagePath %>" class="img-fluid card-img">
                     </div>
                     <div class="col-md">
                         <ul class="list-group">
@@ -155,6 +152,43 @@
                             <li class="list-group-item"><strong>Page Count : </strong> <%= book.page_count %> pages</li>
                             <li class="list-group-item"><strong>Genre : </strong> <%= book.genre %></li>
                             <li class="list-group-item"><strong>Description : </strong> <br> <%= book.description %></li>
+                        </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<% }) %>
+
+<!-- Popular Book Detail Modal -->
+<% popularBooks.forEach(book => { %>
+  <div class="modal fade" id="popularBookDetailModal<%= book._id.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookDetailModalLabel">Book Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <img src="<%= book._id.coverImagePath %>" class="img-fluid card-img">
+                    </div>
+                    <div class="col-md">
+                        <ul class="list-group">
+                            <li class="list-group-item"><h4><%= `${book._id.title} (${book._id.publish_year})` %></h4></li>
+                            <li class="list-group-item"><strong>Stock : </strong> <%= book._id.stock %></li>
+                            <li class="list-group-item"><strong>ISBN : </strong> <%= book._id.isbn %></li>
+                            <li class="list-group-item"><strong>Author : </strong> <%= book._id.author %></li>
+                            <li class="list-group-item"><strong>Page Count : </strong> <%= book._id.page_count %> pages</li>
+                            <li class="list-group-item"><strong>Genre : </strong> <%= book._id.genre %></li>
+                            <li class="list-group-item"><strong>Description : </strong> <br> <%= book._id.description %></li>
                         </ul>
                     </div>
                 </div>

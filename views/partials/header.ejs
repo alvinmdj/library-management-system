@@ -10,22 +10,18 @@
 }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg py-0">
   <div class="container-fluid">
-    <a class="navbar-brand" href='/'>My Library</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link fs-5" href='/'>My Library</a>
+      </li>
+    </ul>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#top-navbar" aria-controls="top-navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="top-navbar">
       <ul class="navbar-nav ms-auto flex-nowrap">
-        <form action="/search" method="GET" class="my-1">
-          <div class="input-group rounded">
-            <input type="text" name="title" class="form-control rounded" placeholder="Search book..." />
-            <button type="submit" class="input-group-text">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </form>
         <% if (!user) { %>
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
@@ -93,6 +89,14 @@
             </li>
           <% } %>
         <% } %>
+        <form action="/search" method="GET" class="px-4 my-1">
+          <div class="input-group rounded">
+            <input type="text" name="title" class="form-control rounded" placeholder="Search book..." />
+            <button type="submit" class="input-group-text">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
       </ul>
     </div>
   </div>

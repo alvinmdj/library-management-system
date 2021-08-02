@@ -30,6 +30,12 @@
   height: 100%;
 }
 
+.card-img {
+  width: 9rem;
+  height: 12rem;
+  margin: auto;
+}
+
 #img-pointer {
   cursor: pointer;
 }
