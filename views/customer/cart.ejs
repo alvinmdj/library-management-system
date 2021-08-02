@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="public/css/styles.css">
+
 <div class="container mt-5 mb-5">
   <div class="row">
     <div class="col-md-8 text-center mx-auto">
@@ -31,7 +33,7 @@
               <% cartItems.filter(item => item.user.id === user.id).map((item, i) => { %>
                 <tr>
                   <th scope="row"><%= ++i %></th>
-                  <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" width="75" height="100"></th>
+                  <th><img src="<%= item.book.coverImagePath %>" alt="<%= item.book.title %>" class="cart-img"></th>
                   <td>
                     <%= item.book.title %>
                     <% if (item.book.stock === 0) { %>
@@ -78,7 +80,7 @@
               <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <img src="<%= item.book.coverImagePath %>" class="img-fluid">
+                        <img src="<%= item.book.coverImagePath %>" class="img-fluid card-img">
                     </div>
                     <div class="col-md">
                         <ul class="list-group">

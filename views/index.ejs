@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="public/css/styles.css">
 
 <!-- Carousel -->
-<div id="carouselCaptions" class="carousel slide mb-4" data-bs-ride="carousel">
+<div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -41,93 +41,94 @@
 </div>
 
 <!-- Main Content -->
-<div class="container mb-4">
-  <div class="row d-flex justify-content-center">
-    <div class="col-md-11">
-      <% if (msg.length !== 0) { %>
-        <div class="alert alert-info fw-bold text-center" role="alert">
-          <%= msg %>
-        </div>
-      <% } %>
+<div class="bg-light">
+  <div class="container my-4">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-11">
+        <% if (msg.length !== 0) { %>
+          <div class="alert alert-info fw-bold text-center" role="alert">
+            <%= msg %>
+          </div>
+        <% } %>
 
-      <!-- Popular Books -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <h2 class="display-6 fw-normal text-center mb-3">Popular Books</h2>
-          <% if (typeof popularBooks !== 'undefined') { %>
-            <div class="row slider mx-4">
-              <% popularBooks.forEach(book => { %>
-                <div class="card">
-                  <img src="<%= book._id.coverImagePath %>" alt="<%= book._id.title %>" id="img-pointer" class="card-img mt-2" data-bs-toggle="modal" data-bs-target="#popularBookDetailModal<%= book._id.id %>">
-                  <div class="card-body p-2">
-                    <p class="card-title mx-3 fw-bold" id="book_title" title="<%= book._id.title %>"><%= book._id.title %></p>
-                    <% if (book._id.stock !== 0) { %>
-                      <form class="cart d-grid mx-3" action="/cart" method="POST">
-                        <% if (user) { %>
-                          <input type="hidden" name="user_id" value="<%= user.id %>">
-                        <% } %>
-                        <input type="hidden" name="book_id" value="<%= book._id.id %>">
-                        <input type="hidden" name="prev_url" value="/">
-                        <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Add to Cart</button>
-                      </form>
-                    <% } else { %>
-                      <div class="d-grid text-center mx-3">
-                        <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
-                      </div>
-                    <% } %>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-muted">Borrowed <%= book.count %> time(s)</small>
-                  </div>
-                </div>
-              <% }) %>
-            </div>
-          <% } else { %>
-            <p class="text-center">Looks like there is nothing popular...</p>
-          <% } %>
-        </div>
-      </div>
-
-      <!-- Recently Added Books -->
-      <div class="card m-0">
-        <div class="card-body">
-          <h2 class="display-6 fw-normal text-center mb-3">Recently Added Books</h2>
-          <% if (typeof recentBooks !== 'undefined') { %>
-            <div class="row d-flex justify-content-center">
-              <% recentBooks.forEach(book => { %>
-                <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2" style="width: 12rem;">
+        <!-- Popular Books -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <h2 class="display-6 fw-normal text-center mb-4">Popular Books</h2>
+            <% if (typeof popularBooks !== 'undefined') { %>
+              <div class="row slider mx-4">
+                <% popularBooks.forEach(book => { %>
                   <div class="card">
-                    <img src="<%= book.coverImagePath %>" id="img-pointer" class="card-img mt-2" alt="<%= book.title %>" data-bs-toggle="modal" data-bs-target="#recentBookDetailModal<%= book.id %>">
-                    <div class="card-body">
-                      <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
-                      <% if (book.stock !== 0) { %>
-                        <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
+                    <img src="<%= book._id.coverImagePath %>" alt="<%= book._id.title %>" id="img-pointer" class="card-img mt-2" data-bs-toggle="modal" data-bs-target="#popularBookDetailModal<%= book._id.id %>">
+                    <div class="card-body p-2">
+                      <p class="card-title mx-3 fw-bold" id="book_title" title="<%= book._id.title %>"><%= book._id.title %></p>
+                      <% if (book._id.stock !== 0) { %>
+                        <form class="cart d-grid mx-3" action="/cart" method="POST">
                           <% if (user) { %>
                             <input type="hidden" name="user_id" value="<%= user.id %>">
                           <% } %>
-                          <input type="hidden" name="book_id" value="<%= book.id %>">
+                          <input type="hidden" name="book_id" value="<%= book._id.id %>">
                           <input type="hidden" name="prev_url" value="/">
                           <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Add to Cart</button>
                         </form>
                       <% } else { %>
-                        <div class="d-grid text-center">
+                        <div class="d-grid text-center mx-3">
                           <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
                         </div>
                       <% } %>
                     </div>
+                    <div class="card-footer text-center">
+                      <small class="text-muted">Borrowed <%= book.count %> time(s)</small>
+                    </div>
                   </div>
-                </div>
-              <% }) %>
-            </div>
-          <% } else { %>
-            <p class="text-center">Looks like there are no book yet...</p>
-          <% } %>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p class="text-center">Looks like there is nothing popular...</p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Recently Added Books -->
+        <div class="card m-0">
+          <div class="card-body">
+            <h2 class="display-6 fw-normal text-center my-4">Recently Added Books</h2>
+            <% if (typeof recentBooks !== 'undefined') { %>
+              <div class="row d-flex justify-content-center">
+                <% recentBooks.forEach(book => { %>
+                  <div class="col-lg-2 col-md-4 col-sm-6 col-xs-3 my-2" style="width: 11.5rem;">
+                    <div class="card">
+                      <img src="<%= book.coverImagePath %>" id="img-pointer" class="card-img mt-2" alt="<%= book.title %>" data-bs-toggle="modal" data-bs-target="#recentBookDetailModal<%= book.id %>">
+                      <div class="card-body">
+                        <h5 class="card-title fs-6" id="book_title" title="<%= book.title %>"><%= book.title %></h5>
+                        <% if (book.stock !== 0) { %>
+                          <form class="cart d-grid mx-auto mb-0" action="/cart" method="POST">
+                            <% if (user) { %>
+                              <input type="hidden" name="user_id" value="<%= user.id %>">
+                            <% } %>
+                            <input type="hidden" name="book_id" value="<%= book.id %>">
+                            <input type="hidden" name="prev_url" value="/">
+                            <button class="btn btn-outline-primary btn-sm" type="submit"><i class="bi bi-cart4"></i> Add to Cart</button>
+                          </form>
+                        <% } else { %>
+                          <div class="d-grid text-center">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" disabled>Out of Stock</button>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p class="text-center">Looks like there are no book yet...</p>
+            <% } %>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <!-- Recently Added Book Detail Modal -->
 <% recentBooks.forEach(book => { %>
   <div class="modal fade" id="recentBookDetailModal<%= book.id %>" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">

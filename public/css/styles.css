@@ -9,6 +9,7 @@
 
 .slick-slide {
   margin: 0 15px;
+  padding-bottom: 0;
 }
 
 .slick-prev:before, .slick-next:before{
@@ -33,6 +34,12 @@
 .card-img {
   width: 9rem;
   height: 12rem;
+  margin: auto;
+}
+
+.cart-img {
+  width: 5rem;
+  height: 7rem;
   margin: auto;
 }
 
