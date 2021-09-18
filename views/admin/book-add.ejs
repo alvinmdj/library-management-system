@@ -8,7 +8,7 @@
           <form method="POST" action="/admin/book" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="isbn" class="form-label">ISBN</label>
-              <input type="text" class="form-control" id="isbn" name="isbn" required <% if (typeof isbn !== 'undefined') { %> value="<%= isbn %>" <% } %>>
+              <input type="text" class="form-control" id="isbn" name="isbn" required autofocus <% if (typeof isbn !== 'undefined') { %> value="<%= isbn %>" <% } %>>
               <% if (typeof errors !== 'undefined') { %>
                 <% errors.forEach(err => { %>
                   <% if (err.param === 'isbn') { %>

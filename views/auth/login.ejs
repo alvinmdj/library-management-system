@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="public/css/styles.css">
 <div class="container">
   <div class="row d-flex justify-content-center">
     <div class="col-10 col-sm-8 col-md-6 col-lg-5 m-5 p-4 bg-light border border-3">
@@ -6,7 +5,7 @@
       <form id="login_form">
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="email" name="email" required>
+          <input type="email" class="form-control" id="email" name="email" required autofocus>
           <p class="email error"></p>
         </div>
         <div class="mb-3">
@@ -45,12 +44,12 @@
       })
 
       const data = await res.json()
-      if(data.errors) {
+      if (data.errors) {
         emailError.textContent = data.errors.email
         passwordError.textContent = data.errors.password
       }
-      if(data.user) {
-        if(data.role === 0) {
+      if (data.user) {
+        if (data.role === 0) {
           location.assign('/admin')
         }
         else location.assign('/')
