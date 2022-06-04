@@ -20,3 +20,5 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
+     # Disable version updates for npm dependencies
+    open-pull-requests-limit: 0
