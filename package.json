@@ -12,7 +12,7 @@
     "bcrypt": "^5.0.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
-    "ejs": "^3.1.6",
+    "ejs": "^3.1.8",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
