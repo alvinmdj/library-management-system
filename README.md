@@ -8,13 +8,11 @@ Some features requires user authentication to be available, such as accessing th
 
 User authenticated as admin can access the admin dashboard where admin can perform CRUD for books, view borrow history of all user, and view all user public information.
 
-The live application is only for demo and fully hosted on Heroku. Uploaded file won't be stored permanently because of [Heroku ephemeral file system](https://devcenter.heroku.com/articles/active-storage-on-heroku).
-
 ## Links
 
 - [Repository](https://github.com/alvinmdj/library-management-system "Library Management System Repo")
 
-- [Live Demo](https://alvinmd-library.herokuapp.com/ "Live Demo")
+- [Live Demo](https://alvinmd-library.onrender.com// "Live on Render")
 
 ## Build With
 - [Node.js](https://nodejs.org/en/)
